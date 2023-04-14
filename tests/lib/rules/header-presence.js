@@ -82,6 +82,10 @@ ruleTester.run("header-presence", rule, {
               messageId: "mergeHeaders",
               output: `/**${EOL} * This is the expected header comment.${EOL} *${EOL} * This is the wrong header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
             },
+            {
+              messageId: "insertHeader",
+              output: `/**${EOL} * This is the expected header comment.${EOL} */${EOL}/**${EOL} * This is the wrong header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+            },
           ],
         },
       ],
