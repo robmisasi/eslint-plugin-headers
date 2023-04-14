@@ -4,6 +4,9 @@
  */
 "use strict";
 
+var { EOL } = require("os");
+var path = require("path");
+
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
@@ -18,16 +21,71 @@ const rule = require("../../../lib/rules/header-presence"),
 const ruleTester = new RuleTester();
 ruleTester.run("header-presence", rule, {
   valid: [
-    // give me some code that won't trigger a warning
     {
-      code: "/**\n * This is an expected header comment.\n */\n\nmodule.exports = 42;\n",
+      options: [
+        {
+          type: "string",
+          content: "This is the expected header comment.",
+        },
+      ],
+      code: `/**${EOL} * This is the expected header comment.${EOL} */${EOL}${EOL}module.exports = 42;${EOL}`,
+    },
+    {
+      options: [
+        {
+          type: "string",
+          content: "This is the expected header comment with pragma.",
+        },
+      ],
+      code: `/**${EOL} * This is the expected header comment with pragma.${EOL} *${EOL} * @jest-environment jsdom${EOL} */${EOL}${EOL}module.exports = 42;${EOL}`,
+    },
+    {
+      options: [
+        {
+          type: "file",
+          path: path.join(__dirname, "../../example-header.txt"),
+        },
+      ],
+      code: `/**${EOL} * This is the expected header.${EOL} */${EOL}${EOL}module.exports = 42;${EOL}`,
     },
   ],
 
   invalid: [
     {
-      code: "module.exports = 42;\n",
-      errors: [{ messageId: "fileHeader" }],
+      options: [
+        {
+          type: "string",
+          content: "This is the expected header comment.",
+        },
+      ],
+      code: `module.exports = 42;${EOL}`,
+      errors: [{ messageId: "missingHeader" }],
+      output: `/**${EOL} * This is the expected header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+    },
+    {
+      options: [
+        {
+          type: "string",
+          content: "This is the expected header comment.",
+        },
+      ],
+      code: `/**${EOL} * This is the wrong header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+      errors: [
+        {
+          messageId: "headerContentMismatch",
+          suggestions: [
+            {
+              messageId: "replaceExistingHeader",
+              output: `/**${EOL} * This is the expected header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+            },
+            {
+              messageId: "mergeHeaders",
+              output: `/**${EOL} * This is the expected header comment.${EOL} *${EOL} * This is the wrong header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+            },
+          ],
+        },
+      ],
+      output: null,
     },
   ],
 });
