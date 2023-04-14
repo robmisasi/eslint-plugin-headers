@@ -4,32 +4,53 @@
 
 <!-- end auto-generated rule header -->
 
-Please describe the origin of the rule here.
+🔧💡 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix) and manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
+
+<!-- end auto-generated rule header -->
+
+While there are several rules that enforce the existence of headers in source
+files, these often conflict with tools (e.g. jest) that use preprocessor
+directives embedded in these comments. This rule exists to enforce the
+existence of specific content while allowing additional content to exist in
+these comments.
 
 ## Rule Details
 
-This rule aims to...
+This rule allows developers to enforce the presence of common header content
+(e.g. copyright information) while allowing additional content to be included
+in the same comment block.
 
 Examples of **incorrect** code for this rule:
 
 ```js
-// fill me in
+module.exports = 42;
 ```
 
 Examples of **correct** code for this rule:
 
 ```js
-// fill me in
+/**
+ * This is the enforced header.
+ */
+
+module.exports = 42;
 ```
 
 ### Options
 
-If there are any options, describe them here. Otherwise, delete this section.
+**type**: either `file` or `string`. Indicates where or what content to enforce
+as a header.
+
+**content**: Only used when `type: "string"`. The string to check in the
+header JSDoc.
+
+**path**: Only used when `type: "file"`. Path to a file containing content
+to check in a header JSDoc.
+
+**trailingNewlines**: Number of newlines to include beneath newly inserted
+JSDoc comments. This has no effect when linting or replacing existing JSDoc
+headers.
 
 ## When Not To Use It
 
-Give a short description of when it would be appropriate to turn off this rule.
-
-## Further Reading
-
-If there are other links that describe the issue this rule addresses, please include them here in a bulleted list.
+Do not use this rule if you have no use for enforcing a file header.
