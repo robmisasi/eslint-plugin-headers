@@ -22,27 +22,29 @@ Add `header-docblock` to the plugins section of your `.eslintrc` configuration f
 
 ```json
 {
-    "plugins": [
-        "header-docblock"
-    ]
+  "plugins": ["header-docblock"]
 }
 ```
-
 
 Then configure the rules you want to use under the rules section.
 
 ```json
 {
-    "rules": {
-        "header-docblock/rule-name": 2
-    }
+  "rules": {
+    "header-docblock/rule-name": 2
+  }
 }
 ```
 
 ## Rules
 
 <!-- begin auto-generated rules list -->
-TODO: Run eslint-doc-generator to generate the rules list.
+
+🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).\
+💡 Manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
+
+| Name                                             | Description                                                             | 🔧  | 💡  |
+| :----------------------------------------------- | :---------------------------------------------------------------------- | :-- | :-- |
+| [header-presence](docs/rules/header-presence.md) | Verifies the presence of a particular string in a file's first docblock | 🔧  | 💡  |
+
 <!-- end auto-generated rules list -->
-
-
