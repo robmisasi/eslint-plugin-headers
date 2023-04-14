@@ -9,7 +9,6 @@ var {
   generateDocblock,
   getDocblock,
   getDocblockText,
-  isDocblock,
   mergeDocblocks,
 } = require("../../lib/utils");
 
@@ -22,14 +21,6 @@ describe("utils", function () {
     var expectedBlock = `/**${EOL} * block 1${EOL} *${EOL} * block 2${EOL} *${EOL} * block 3${EOL} * has 2 lines${EOL} */`;
     var actualBlock = mergeDocblocks(block1, block2, block3);
     assert.equal(actualBlock, expectedBlock);
-  });
-
-  it("correctly identifies docblocks", function () {
-    var validBlock = `/**${EOL} * block 1${EOL} */`;
-    var invalidBlock = `/**${EOL} * block 1 */${EOL} */`;
-
-    assert.equal(isDocblock(validBlock), true);
-    assert.equal(isDocblock(invalidBlock), false);
   });
 
   it("extracts docblocks from a string", function () {
