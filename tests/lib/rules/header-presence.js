@@ -87,5 +87,20 @@ ruleTester.run("header-presence", rule, {
       ],
       output: null,
     },
+    {
+      options: [
+        {
+          type: "string",
+          content: "This is a header",
+        },
+      ],
+      code: `// Bad comment${EOL}module.exports = 42;`,
+      errors: [
+        {
+          messageId: "missingHeader",
+        },
+      ],
+      output: `/**${EOL} * This is a header${EOL} */${EOL}// Bad comment${EOL}module.exports = 42;`,
+    },
   ],
 });
