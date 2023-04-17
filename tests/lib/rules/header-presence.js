@@ -48,6 +48,15 @@ ruleTester.run("header-presence", rule, {
       ],
       code: `/**${EOL} * This is the expected header.${EOL} */${EOL}${EOL}module.exports = 42;${EOL}`,
     },
+    {
+      options: [
+        {
+          type: "string",
+          content: "This is the expected header.",
+        },
+      ],
+      code: `#! /usr/bin/node${EOL}/**${EOL} * This is the expected header.${EOL} */${EOL}${EOL}module.exports = 42;`,
+    },
   ],
 
   invalid: [
