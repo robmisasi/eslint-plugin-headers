@@ -37,11 +37,11 @@ module.exports = 42;
 **type**: either `file` or `string`. Indicates where or what content to enforce
 as a header.
 
-**content**: Only used when `type: "string"`. The string to check in the
-header JSDoc.
+**content**: Required when `type: "string"`. The string to check in the
+header JSDoc comment.
 
-**path**: Only used when `type: "file"`. Path to a file containing content
-to check in a header JSDoc.
+**path**: Required when `type: "file"`. Path to a file containing content
+to check in a header JSDoc comment.
 
 ## When Not To Use It
 
