@@ -4,10 +4,6 @@
 
 <!-- end auto-generated rule header -->
 
-🔧💡 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix) and manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
-
-<!-- end auto-generated rule header -->
-
 While there are several rules that enforce the existence of headers in source
 files, these often conflict with tools (e.g. jest) that use preprocessor
 directives embedded in these comments. This rule exists to enforce the
@@ -46,10 +42,6 @@ header JSDoc.
 
 **path**: Only used when `type: "file"`. Path to a file containing content
 to check in a header JSDoc.
-
-**trailingNewlines**: Number of newlines to include beneath newly inserted
-JSDoc comments. This has no effect when linting or replacing existing JSDoc
-headers.
 
 ## When Not To Use It
 
