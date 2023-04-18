@@ -1,7 +1,7 @@
 {
-  "name": "eslint-plugin-header-docblock",
+  "name": "eslint-plugin-headers",
   "version": "0.0.0",
-  "description": "Rules for detecting file headers in docblock pragmas.",
+  "description": "Rules for detecting and enforcing file headers.",
   "keywords": [
     "eslint",
     "eslintplugin",

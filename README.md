@@ -1,6 +1,6 @@
-# eslint-plugin-header-docblock
+# eslint-plugin-headers
 
-Rules for detecting file headers in docblock pragmas.
+Rules for detecting and enforcing file headers.
 
 ## Installation
 
@@ -10,19 +10,19 @@ You'll first need to install [ESLint](https://eslint.org/):
 npm i eslint --save-dev
 ```
 
-Next, install `eslint-plugin-header-docblock`:
+Next, install `eslint-plugin-headers`:
 
 ```sh
-npm install eslint-plugin-header-docblock --save-dev
+npm install eslint-plugin-headers --save-dev
 ```
 
 ## Usage
 
-Add `header-docblock` to the plugins section of your `.eslintrc` configuration file. You can omit the `eslint-plugin-` prefix:
+Add `headers` to the plugins section of your `.eslintrc` configuration file. You can omit the `eslint-plugin-` prefix:
 
 ```json
 {
-  "plugins": ["header-docblock"]
+  "plugins": ["headers"]
 }
 ```
 
@@ -31,7 +31,10 @@ Then configure the rules you want to use under the rules section.
 ```json
 {
   "rules": {
-    "header-docblock/rule-name": 2
+    "headers/header-presence": [
+      "error",
+      { "type": "string", "content": "Hello World!" }
+    ]
   }
 }
 ```
@@ -43,8 +46,8 @@ Then configure the rules you want to use under the rules section.
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).\
 💡 Manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
 
-| Name                                             | Description                                                             | 🔧 | 💡 |
-| :----------------------------------------------- | :---------------------------------------------------------------------- | :- | :- |
-| [header-presence](docs/rules/header-presence.md) | Verifies the presence of a particular string in a file's first docblock | 🔧 | 💡 |
+| Name                                             | Description                                                             | 🔧  | 💡  |
+| :----------------------------------------------- | :---------------------------------------------------------------------- | :-- | :-- |
+| [header-presence](docs/rules/header-presence.md) | Verifies the presence of a particular string in a file's first docblock | 🔧  | 💡  |
 
 <!-- end auto-generated rules list -->
