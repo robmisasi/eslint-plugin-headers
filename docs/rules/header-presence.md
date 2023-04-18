@@ -1,4 +1,4 @@
-# Verifies the presence of a particular string in a file's first docblock (`header-docblock/header-presence`)
+# Verifies the presence of a particular string in a file's first docblock (`headers/header-presence`)
 
 🔧💡 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix) and manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
 
@@ -45,4 +45,4 @@ to check in a header JSDoc comment.
 
 ## When Not To Use It
 
-Do not use this rule if you have no use for enforcing a file header.
+Do not use this rule if you have no use for enforcing content in a file header.
