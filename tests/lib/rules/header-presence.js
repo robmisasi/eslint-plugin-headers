@@ -23,7 +23,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "string",
+          source: "string",
           content: "This is the expected header comment.",
         },
       ],
@@ -32,7 +32,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "string",
+          source: "string",
           content: "This is the expected header comment with carriage returns.",
         },
       ],
@@ -41,7 +41,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "string",
+          source: "string",
           content:
             "This is the expected header comment\r\nwith a different EoL.",
         },
@@ -51,7 +51,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "string",
+          source: "string",
           content: "This is the expected header comment with pragma.",
         },
       ],
@@ -60,7 +60,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "file",
+          source: "file",
           path: path.join(__dirname, "../../example-header.txt"),
         },
       ],
@@ -69,7 +69,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "string",
+          source: "string",
           content: "This is the expected header.",
         },
       ],
@@ -81,7 +81,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "string",
+          source: "string",
           content: "This is the expected header comment.",
         },
       ],
@@ -92,7 +92,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "string",
+          source: "string",
           content: "This is the expected header comment.",
         },
       ],
@@ -121,7 +121,7 @@ ruleTester.run("header-presence", rule, {
     {
       options: [
         {
-          type: "string",
+          source: "string",
           content: "This is a header",
         },
       ],
