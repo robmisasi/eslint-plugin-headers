@@ -4,7 +4,6 @@
  */
 "use strict";
 
-var { EOL } = require("os");
 var path = require("path");
 
 //------------------------------------------------------------------------------
@@ -28,7 +27,26 @@ ruleTester.run("header-presence", rule, {
           content: "This is the expected header comment.",
         },
       ],
-      code: `/**${EOL} * This is the expected header comment.${EOL} */${EOL}${EOL}module.exports = 42;${EOL}`,
+      code: `/**\n * This is the expected header comment.\n */\n\nmodule.exports = 42;\n`,
+    },
+    {
+      options: [
+        {
+          type: "string",
+          content: "This is the expected header comment with carriage returns.",
+        },
+      ],
+      code: `/**\r\n * This is the expected header comment with carriage returns.\r\n */\r\n\r\nmodule.exports = 42;\r\n`,
+    },
+    {
+      options: [
+        {
+          type: "string",
+          content:
+            "This is the expected header comment\r\nwith a different EoL.",
+        },
+      ],
+      code: `/**\n * This is the expected header comment\n * with a different EoL.\n */\n\nmodule.exports = 42;\n`,
     },
     {
       options: [
@@ -37,7 +55,7 @@ ruleTester.run("header-presence", rule, {
           content: "This is the expected header comment with pragma.",
         },
       ],
-      code: `/**${EOL} * This is the expected header comment with pragma.${EOL} *${EOL} * @jest-environment jsdom${EOL} */${EOL}${EOL}module.exports = 42;${EOL}`,
+      code: `/**\n * This is the expected header comment with pragma.\n *\n * @jest-environment jsdom\n */\n\nmodule.exports = 42;\n`,
     },
     {
       options: [
@@ -46,7 +64,7 @@ ruleTester.run("header-presence", rule, {
           path: path.join(__dirname, "../../example-header.txt"),
         },
       ],
-      code: `/**${EOL} * This is the expected header.${EOL} */${EOL}${EOL}module.exports = 42;${EOL}`,
+      code: `/**\n * This is the expected header.\n */\n\nmodule.exports = 42;\n`,
     },
     {
       options: [
@@ -55,7 +73,7 @@ ruleTester.run("header-presence", rule, {
           content: "This is the expected header.",
         },
       ],
-      code: `#! /usr/bin/node${EOL}/**${EOL} * This is the expected header.${EOL} */${EOL}${EOL}module.exports = 42;`,
+      code: `#! /usr/bin/node\n/**\n * This is the expected header.\n */\n\nmodule.exports = 42;`,
     },
   ],
 
@@ -67,9 +85,9 @@ ruleTester.run("header-presence", rule, {
           content: "This is the expected header comment.",
         },
       ],
-      code: `module.exports = 42;${EOL}`,
+      code: `module.exports = 42;\n`,
       errors: [{ messageId: "missingHeader" }],
-      output: `/**${EOL} * This is the expected header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+      output: `/**\n * This is the expected header comment.\n */\nmodule.exports = 42;\n`,
     },
     {
       options: [
@@ -78,22 +96,22 @@ ruleTester.run("header-presence", rule, {
           content: "This is the expected header comment.",
         },
       ],
-      code: `/**${EOL} * This is the wrong header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+      code: `/**\n * This is the wrong header comment.\n */\nmodule.exports = 42;\n`,
       errors: [
         {
           messageId: "headerContentMismatch",
           suggestions: [
             {
               messageId: "replaceExistingHeader",
-              output: `/**${EOL} * This is the expected header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+              output: `/**\n * This is the expected header comment.\n */\nmodule.exports = 42;\n`,
             },
             {
               messageId: "mergeHeaders",
-              output: `/**${EOL} * This is the expected header comment.${EOL} *${EOL} * This is the wrong header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+              output: `/**\n * This is the expected header comment.\n *\n * This is the wrong header comment.\n */\nmodule.exports = 42;\n`,
             },
             {
               messageId: "insertHeader",
-              output: `/**${EOL} * This is the expected header comment.${EOL} */${EOL}/**${EOL} * This is the wrong header comment.${EOL} */${EOL}module.exports = 42;${EOL}`,
+              output: `/**\n * This is the expected header comment.\n */\n/**\n * This is the wrong header comment.\n */\nmodule.exports = 42;\n`,
             },
           ],
         },
@@ -107,13 +125,13 @@ ruleTester.run("header-presence", rule, {
           content: "This is a header",
         },
       ],
-      code: `// Bad comment${EOL}module.exports = 42;`,
+      code: `// Bad comment\nmodule.exports = 42;`,
       errors: [
         {
           messageId: "missingHeader",
         },
       ],
-      output: `/**${EOL} * This is a header${EOL} */${EOL}// Bad comment${EOL}module.exports = 42;`,
+      output: `/**\n * This is a header\n */\n// Bad comment\nmodule.exports = 42;`,
     },
   ],
 });
