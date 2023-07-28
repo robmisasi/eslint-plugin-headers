@@ -4,8 +4,9 @@ var { EOL } = require("os");
 var assert = require("assert");
 
 var {
-  formatExpectedHeader,
+  appendNewlines,
   generateDocblock,
+  generateLineCommentBlock,
   getDocblock,
   getDocblockText,
   getEolCharacter,
@@ -67,11 +68,19 @@ describe("utils", function () {
     assert.equal(actualBlock, expectedBlock);
   });
 
-  it("correctly formats a docblock with newlines", function () {
+  it("correctly generates a line comment block from a string", function () {
+    var s = "This is a header string\nwith multiple lines";
+
+    var expectedText = "// This is a header string\n// with multiple lines";
+
+    assert.equal(generateLineCommentBlock(s, "\n"), expectedText);
+  });
+
+  it("correctly formats text with newlines", function () {
     var block = `/**${EOL} * This is a comment.${EOL} */`;
     var expectedBlock = `${block}${EOL}`;
 
-    var actualBlock = formatExpectedHeader(block, EOL, 1);
+    var actualBlock = appendNewlines(block, EOL, 1);
 
     assert.equal(actualBlock, expectedBlock);
   });
