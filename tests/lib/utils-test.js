@@ -8,6 +8,7 @@ var {
   generateDocblock,
   getDocblock,
   getDocblockText,
+  getEolCharacter,
   mergeDocblocks,
 } = require("../../lib/utils");
 
@@ -18,13 +19,13 @@ describe("utils", function () {
     var block3 = `/**${EOL} * block 3${EOL} * has 2 lines${EOL} */`;
 
     var expectedBlock = `/**${EOL} * block 1${EOL} *${EOL} * block 2${EOL} *${EOL} * block 3${EOL} * has 2 lines${EOL} */`;
-    var actualBlock = mergeDocblocks(block1, block2, block3);
+    var actualBlock = mergeDocblocks(EOL, block1, block2, block3);
     assert.equal(actualBlock, expectedBlock);
   });
 
   it("extracts docblocks from a string", function () {
     var block1 = `/**${EOL} * block 1${EOL} */`;
-    var [actualBlock1, actualBlock1End] = getDocblock(block1);
+    var [actualBlock1, actualBlock1End] = getDocblock(block1, EOL);
 
     assert.equal(actualBlock1, block1);
     assert.equal(actualBlock1End, block1.length);
@@ -39,7 +40,7 @@ describe("utils", function () {
     var [actualBlock1, actualBlock1End] = getDocblock(multiblock);
     var [actualBlock2, actualBlock2End] = getDocblock(
       multiblock,
-      actualBlock1End
+      actualBlock1End,
     );
 
     assert.equal(actualBlock1, block1);
@@ -52,7 +53,7 @@ describe("utils", function () {
     var block = `/**${EOL} * This is a comment${EOL} * that has multiple lines.${EOL} *${EOL} * @jest-environment jsdom${EOL} */`;
 
     var expectedText = `This is a comment${EOL}that has multiple lines.${EOL}${EOL}@jest-environment jsdom`;
-    var actualText = getDocblockText(block);
+    var actualText = getDocblockText(block, EOL);
 
     assert.equal(actualText, expectedText);
   });
@@ -62,7 +63,7 @@ describe("utils", function () {
 
     var expectedBlock = `/**${EOL} * ${s}${EOL} */`;
 
-    var actualBlock = generateDocblock(s);
+    var actualBlock = generateDocblock(s, EOL);
     assert.equal(actualBlock, expectedBlock);
   });
 
@@ -70,8 +71,17 @@ describe("utils", function () {
     var block = `/**${EOL} * This is a comment.${EOL} */`;
     var expectedBlock = `${block}${EOL}`;
 
-    var actualBlock = formatExpectedHeader(block, 1);
+    var actualBlock = formatExpectedHeader(block, EOL, 1);
 
     assert.equal(actualBlock, expectedBlock);
+  });
+
+  it("gets the correct End of Line character", function () {
+    assert.equal(getEolCharacter("This is some code\n"), "\n");
+    assert.equal(
+      getEolCharacter("This is some code.\r\nAnd some more code."),
+      "\r\n",
+    );
+    assert.equal(getEolCharacter("This is some code.\u2028"), "\u2028");
   });
 });
