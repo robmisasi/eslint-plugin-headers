@@ -33,7 +33,7 @@ Then configure the rules you want to use under the rules section.
   "rules": {
     "headers/header-presence": [
       "error",
-      { "type": "string", "content": "Hello World!" }
+      { "source": "string", "content": "Hello World!" }
     ]
   }
 }
