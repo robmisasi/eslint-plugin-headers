@@ -33,6 +33,16 @@ ruleTester.run("header-presence", rule, {
       options: [
         {
           source: "string",
+          style: "line",
+          content: "This is the expected header.",
+        },
+      ],
+      code: `// This is the expected header.\n\nmodule.exports = 42;\n`,
+    },
+    {
+      options: [
+        {
+          source: "string",
           content: "This is the expected header comment with carriage returns.",
         },
       ],
@@ -106,10 +116,6 @@ ruleTester.run("header-presence", rule, {
               output: `/**\n * This is the expected header comment.\n */\nmodule.exports = 42;\n`,
             },
             {
-              messageId: "mergeHeaders",
-              output: `/**\n * This is the expected header comment.\n *\n * This is the wrong header comment.\n */\nmodule.exports = 42;\n`,
-            },
-            {
               messageId: "insertHeader",
               output: `/**\n * This is the expected header comment.\n */\n/**\n * This is the wrong header comment.\n */\nmodule.exports = 42;\n`,
             },
@@ -125,13 +131,55 @@ ruleTester.run("header-presence", rule, {
           content: "This is a header",
         },
       ],
-      code: `// Bad comment\nmodule.exports = 42;`,
+      code: "// Bad comment\nmodule.exports = 42;\n",
       errors: [
         {
-          messageId: "missingHeader",
+          messageId: "headerContentMismatch",
+          suggestions: [
+            {
+              messageId: "replaceExistingHeader",
+              output: "/**\n * This is a header\n */\nmodule.exports = 42;\n",
+            },
+            {
+              messageId: "insertHeader",
+              output:
+                "/**\n * This is a header\n */\n// Bad comment\nmodule.exports = 42;\n",
+            },
+          ],
         },
       ],
-      output: `/**\n * This is a header\n */\n// Bad comment\nmodule.exports = 42;`,
+      output: null,
+    },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is a header",
+        },
+      ],
+      code: "/**\n * @jest-environment jsdom\n */\n\nmodule.exports = 42;\n",
+      errors: [
+        {
+          messageId: "headerContentMismatch",
+          suggestions: [
+            {
+              messageId: "replaceExistingHeader",
+              output: "/**\n * This is a header\n */\n\nmodule.exports = 42;\n",
+            },
+            {
+              messageId: "mergeHeaders",
+              output:
+                "/**\n * This is a header\n *\n * @jest-environment jsdom\n */\n\nmodule.exports = 42;\n",
+            },
+            {
+              messageId: "insertHeader",
+              output:
+                "/**\n * This is a header\n */\n/**\n * @jest-environment jsdom\n */\n\nmodule.exports = 42;\n",
+            },
+          ],
+        },
+      ],
+      output: null,
     },
   ],
 });
