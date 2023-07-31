@@ -46,8 +46,8 @@ Then configure the rules you want to use under the rules section.
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).\
 💡 Manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
 
-| Name                                             | Description                                                             | 🔧  | 💡  |
-| :----------------------------------------------- | :---------------------------------------------------------------------- | :-- | :-- |
-| [header-presence](docs/rules/header-presence.md) | Verifies the presence of a particular string in a file's first docblock | 🔧  | 💡  |
+| Name                                             | Description                                                                              | 🔧 | 💡 |
+| :----------------------------------------------- | :--------------------------------------------------------------------------------------- | :- | :- |
+| [header-presence](docs/rules/header-presence.md) | Verifies the presence of a particular string in a file's first docblock or comment block | 🔧 | 💡 |
 
 <!-- end auto-generated rules list -->
