@@ -1,7 +1,6 @@
 # eslint-plugin-headers
 
-Rules for detecting, enforcing, and preserving certain elements of file
-headers.
+Rules for checking and automatically inserting file headers.
 
 ## Installation
 
@@ -34,11 +33,47 @@ Then configure the rules you want to use under the rules section.
   "rules": {
     "headers/header-presence": [
       "error",
-      { "source": "string", "content": "Hello World!" }
+      {
+        "source": "string",
+        "content": "Copyright 2023. All rights reserved."
+      }
     ]
   }
 }
 ```
+
+Original file without header:
+
+```js
+module.exports = 42;
+```
+
+Fixed file:
+
+```js
+/**
+ * Copyright 2023. All rights reserved.
+ */
+
+module.exports = 42;
+```
+
+### Options
+
+**source**: either `file` or `string`. Indicates the content to enforce
+as a header.
+
+**style**: either `line` or `jsdoc`. Indicates comment style to enforce.
+Defaults to `jsdoc`.
+
+**content**: Required when `source: "string"`. The string to enforce in the
+header comment.
+
+**path**: Required when `source: "file"`. Path to a file containing content
+to enforce in a header comment.
+
+**preservePragmas**: boolean, preserves pragma expressions in leading
+comments when updating header. Defaults to `true`. No effect when `style: "line"`.
 
 ## Rules
 
