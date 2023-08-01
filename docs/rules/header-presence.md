@@ -23,14 +23,48 @@ module.exports = 42;
 
 Examples of **correct** code for this rule:
 
+**Example 0:**
+The header provided contains the text "This is a new header."
+
+Original file:
+
+```js
+module.exports = 42;
+```
+
+Fixed file:
+
 ```js
 /**
- * This is the enforced header.
+ * This is a new header.
+ */
+module.exports = 42;
+```
+
+**Example 1:**
+The header provided contains the text "Copyright Star Date 100598.1 United
+Federation of Planets. All rights reserved."
+
+Original file:
+
+```js
+/**
+ * @author James T. Kirk
+ */
+
+module.exports = 1701;
+```
+
+Fixed file:
+
+```js
+/**
+ * Copyright Star Date 100598.1 United Federation of Planets. All rights reserved.
  *
  * @author James T. Kirk
  */
 
-module.exports = 42;
+module.exports = 1701;
 ```
 
 ### Options
