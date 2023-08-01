@@ -6,13 +6,13 @@
 
 While there are several rules that enforce the existence of headers in source
 files, these often conflict with tools that use or add preprocessor directives
-or pragmas embedded in these comments. This rule exists to enforce the
-existence of specific header content while maintaining these directives.
+or pragmas embedded in these comments (e.g. jest). This rule exists to enforce
+the existence of specific header content while maintaining these directives.
 
 ## Rule Details
 
 This rule allows developers to enforce the presence of common header content
-(e.g. copyright information) while allowing additional content to be included
+(e.g. copyright information) while preserving pragma expressions included
 in the same comment block.
 
 Examples of **incorrect** code for this rule:
@@ -45,7 +45,10 @@ Defaults to `jsdoc`.
 header comment.
 
 **path**: Required when `source: "file"`. Path to a file containing content
-to check in a header comment.
+to enforce in a header comments.
+
+**preservePragmas**: boolean, preserves pragma expressions in leading
+comments when updating header. Defaults to `true`. No effect when `style: "line"`.
 
 ## When Not To Use It
 
