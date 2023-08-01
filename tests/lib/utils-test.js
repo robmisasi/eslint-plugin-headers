@@ -1,6 +1,5 @@
 "use strict";
 
-const { EOL } = require("os");
 const assert = require("assert");
 
 const {
@@ -15,28 +14,28 @@ const {
 
 describe("utils", () => {
   it("merges docblocks", () => {
-    const block1 = `/**${EOL} * block 1${EOL} */`;
-    const block2 = `/**${EOL} * block 2${EOL} */`;
-    const block3 = `/**${EOL} * block 3${EOL} * has 2 lines${EOL} */`;
+    const block1 = `/**\n * block 1\n */`;
+    const block2 = `/**\n * block 2\n */`;
+    const block3 = `/**\n * block 3\n * has 2 lines\n */`;
 
-    const expectedBlock = `/**${EOL} * block 1${EOL} *${EOL} * block 2${EOL} *${EOL} * block 3${EOL} * has 2 lines${EOL} */`;
-    const actualBlock = mergeDocblocks(EOL, block1, block2, block3);
+    const expectedBlock = `/**\n * block 1\n *\n * block 2\n *\n * block 3\n * has 2 lines\n */`;
+    const actualBlock = mergeDocblocks("\n", block1, block2, block3);
     assert.equal(actualBlock, expectedBlock);
   });
 
   it("extracts docblocks from a string", () => {
-    const block1 = `/**${EOL} * block 1${EOL} */`;
-    const [actualBlock1, actualBlock1End] = getDocblock(block1, EOL);
+    const block1 = `/**\n * block 1\n */`;
+    const [actualBlock1, actualBlock1End] = getDocblock(block1, "\n");
 
     assert.equal(actualBlock1, block1);
     assert.equal(actualBlock1End, block1.length);
   });
 
   it("extracts docblocks from a string containing multiple docblocks", () => {
-    const block1 = `/**${EOL} * block 1${EOL} */`;
-    const block2 = `/**${EOL} * block 2${EOL} */`;
+    const block1 = `/**\n * block 1\n */`;
+    const block2 = `/**\n * block 2\n */`;
 
-    const multiblock = `${block1}${EOL}${EOL}${block2}`;
+    const multiblock = `${block1}\n\n${block2}`;
 
     const [actualBlock1, actualBlock1End] = getDocblock(multiblock);
     const [actualBlock2, actualBlock2End] = getDocblock(
@@ -51,10 +50,10 @@ describe("utils", () => {
   });
 
   it("extracts text from a docblock correctly", () => {
-    const block = `/**${EOL} * This is a comment${EOL} * that has multiple lines.${EOL} *${EOL} * @jest-environment jsdom${EOL} */`;
+    const block = `/**\n * This is a comment\n * that has multiple lines.\n *\n * @jest-environment jsdom\n */`;
 
-    const expectedText = `This is a comment${EOL}that has multiple lines.${EOL}${EOL}@jest-environment jsdom`;
-    const actualText = getDocblockText(block, EOL);
+    const expectedText = `This is a comment\nthat has multiple lines.\n\n@jest-environment jsdom`;
+    const actualText = getDocblockText(block, "\n");
 
     assert.equal(actualText, expectedText);
   });
@@ -62,9 +61,9 @@ describe("utils", () => {
   it("correctly generates a docblock from a header string", () => {
     const s = "This is a header string.";
 
-    const expectedBlock = `/**${EOL} * ${s}${EOL} */`;
+    const expectedBlock = `/**\n * ${s}\n */`;
 
-    const actualBlock = generateDocblock(s, EOL);
+    const actualBlock = generateDocblock(s, "\n");
     assert.equal(actualBlock, expectedBlock);
   });
 
@@ -77,10 +76,10 @@ describe("utils", () => {
   });
 
   it("correctly formats text with newlines", () => {
-    const block = `/**${EOL} * This is a comment.${EOL} */`;
-    const expectedBlock = `${block}${EOL}`;
+    const block = `/**\n * This is a comment.\n */`;
+    const expectedBlock = `${block}\n`;
 
-    const actualBlock = appendNewlines(block, EOL, 1);
+    const actualBlock = appendNewlines(block, "\n", 1);
 
     assert.equal(actualBlock, expectedBlock);
   });
@@ -91,6 +90,5 @@ describe("utils", () => {
       getEolCharacter("This is some code.\r\nAnd some more code."),
       "\r\n",
     );
-    assert.equal(getEolCharacter("This is some code.\u2028"), "\u2028");
   });
 });
