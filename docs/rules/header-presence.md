@@ -79,7 +79,7 @@ Defaults to `jsdoc`.
 header comment.
 
 **path**: Required when `source: "file"`. Path to a file containing content
-to enforce in a header comments.
+to enforce in a header comment.
 
 **preservePragmas**: boolean, preserves pragma expressions in leading
 comments when updating header. Defaults to `true`. No effect when `style: "line"`.
