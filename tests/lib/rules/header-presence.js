@@ -95,6 +95,36 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "#! /usr/bin/node\n/**\n * This is the expected header with shebang.\n */\n\nmodule.exports = 42;",
     },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is the header",
+          blockPrefix: "blockPrefix\n",
+        },
+      ],
+      code: "/*blockPrefix\nThis is the header\n */\nmodule.exports = 42;",
+    },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is the header",
+          blockSuffix: "\nblockSuffix",
+        },
+      ],
+      code: "/**\nThis is the header\nblockSuffix*/\nmodule.exports = 42;",
+    },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is the header",
+          linePrefix: " # ",
+        },
+      ],
+      code: "/**\n # This is the header\n */\nmodule.exports = 42;",
+    },
   ],
 
   invalid: [
@@ -156,6 +186,30 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * @jest-environment jsdom\n */\n\nmodule.exports = 42;\n",
       errors: [{ messageId: "headerContentMismatch" }],
       output: "/**\n * This is a header\n */\n\nmodule.exports = 42;\n",
+    },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is a header",
+          blockPrefix: "blockPrefix\n",
+        },
+      ],
+      code: "/**\n * This is a header.\n */\nmodule.exports = 42;",
+      errors: [{ messageId: "headerContentMismatch" }],
+      output: "/*blockPrefix\n * This is a header\n */\nmodule.exports = 42;",
+    },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is a header",
+          blockSuffix: "\nblockSuffix",
+        },
+      ],
+      code: "/**\n * This is a header.\n */\nmodule.exports = 42;",
+      errors: [{ messageId: "headerContentMismatch" }],
+      output: "/**\n * This is a header\nblockSuffix*/\nmodule.exports = 42;",
     },
   ],
 });
