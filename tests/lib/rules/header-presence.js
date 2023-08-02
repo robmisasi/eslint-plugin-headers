@@ -43,6 +43,16 @@ ruleTester.run("header-presence", rule, {
       options: [
         {
           source: "string",
+          style: "line",
+          content: "This is the expected line 1.\nThis is line 2.",
+        },
+      ],
+      code: "// This is the expected line 1.\n// This is line 2.\nmodule.exports = 42;\n",
+    },
+    {
+      options: [
+        {
+          source: "string",
           content: "This is the expected header comment with carriage returns.",
         },
       ],
