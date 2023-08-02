@@ -75,6 +75,12 @@ to enforce in a header comment.
 **preservePragmas**: boolean, preserves pragma expressions in leading
 comments when updating header. Defaults to `true`. No effect when `style: "line"`.
 
+**blockPrefix**: string, prepended to the start of the comment block.
+
+**blockSuffix**: string, appended at the end of the comment block.
+
+**linePrefix**: string, prepended to the start of each line of content in the header.
+
 ## Rules
 
 <!-- begin auto-generated rules list -->
