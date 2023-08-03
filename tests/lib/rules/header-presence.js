@@ -103,7 +103,7 @@ ruleTester.run("header-presence", rule, {
           blockPrefix: "blockPrefix\n",
         },
       ],
-      code: "/*blockPrefix\nThis is the header\n */\nmodule.exports = 42;",
+      code: "/*blockPrefix\n * This is the header\n */\nmodule.exports = 42;",
     },
     {
       options: [
@@ -113,7 +113,7 @@ ruleTester.run("header-presence", rule, {
           blockSuffix: "\nblockSuffix",
         },
       ],
-      code: "/**\nThis is the header\nblockSuffix*/\nmodule.exports = 42;",
+      code: "/**\n * This is the header\nblockSuffix*/\nmodule.exports = 42;",
     },
     {
       options: [
