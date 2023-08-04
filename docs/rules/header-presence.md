@@ -24,7 +24,21 @@ module.exports = 42;
 Examples of **correct** code for this rule:
 
 **Example 0:**
-The header provided contains the text "This is a new header."
+Configuration:
+
+```json
+{
+  "rules": {
+    "headers/header-presence": [
+      "error",
+      {
+        "source": "string",
+        "content": "This is a new header."
+      }
+    ]
+  }
+}
+```
 
 Original file:
 
@@ -42,8 +56,27 @@ module.exports = 42;
 ```
 
 **Example 1:**
-The header provided contains the text "Copyright Star Date 100598.1 United
-Federation of Planets. All rights reserved."
+Configuration:
+
+```json
+{
+  "rules": {
+    "headers/header-presence": [
+      "error",
+      {
+        "source": "file",
+        "path": "./LICENSE"
+      }
+    ]
+  }
+}
+```
+
+LICENSE:
+
+```txt
+Copyright Star Date 100598.1 United Federation of Planets. All rights reserved.
+```
 
 Original file:
 

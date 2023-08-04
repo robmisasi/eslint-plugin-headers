@@ -1,6 +1,6 @@
 # eslint-plugin-headers
 
-A plugin for checking, inserting, and formatting file headers.
+A flexible plugin for checking, inserting, and formatting file headers.
 
 Useful for enforcing and updating copyright notices while preserving
 pragma expressions in leading content blocks.
@@ -45,19 +45,20 @@ Then configure the rules you want to use under the rules section.
 }
 ```
 
-Original file without header:
+**Example:**
+
+Using the configuration from above, here's a file without a matching header:
 
 ```js
 module.exports = 42;
 ```
 
-Fixed file:
+When the fix is applied, the file now appears so:
 
 ```js
 /**
  * Copyright 2023. All rights reserved.
  */
-
 module.exports = 42;
 ```
 
