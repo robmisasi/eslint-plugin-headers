@@ -1,5 +1,5 @@
 /**
- * @fileoverview Verifies the presence of a particular string in a file's first docblock.
+ * @fileoverview Verifies the content and format of a file's leading comment block.
  * @author Rob Misasi
  */
 "use strict";
@@ -10,7 +10,7 @@ const path = require("path");
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require("../../../lib/rules/header-presence"),
+const rule = require("../../../lib/rules/header-format"),
   RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------

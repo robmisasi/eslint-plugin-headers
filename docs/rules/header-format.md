@@ -1,4 +1,4 @@
-# Verifies the presence of a particular string in a file's first docblock or comment block (`headers/header-presence`)
+# Verifies the content and format of a file's leading comment block (`headers/header-format`)
 
 🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
