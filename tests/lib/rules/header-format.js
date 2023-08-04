@@ -166,6 +166,19 @@ ruleTester.run("header-presence", rule, {
       options: [
         {
           source: "string",
+          content: "This is a\nsplit comment",
+          style: "line",
+        },
+      ],
+      code: "// This is a\n\n// split comment\nmodule.exports = 42;\n",
+      errors: [{ messageId: "headerContentMismatch" }],
+      output:
+        "// This is a\n// split comment\n\n// split comment\nmodule.exports = 42;\n",
+    },
+    {
+      options: [
+        {
+          source: "string",
           content: "This is a header",
         },
       ],
