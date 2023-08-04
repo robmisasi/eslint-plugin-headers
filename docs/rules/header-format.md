@@ -11,9 +11,9 @@ the existence of specific header content while maintaining these directives.
 
 ## Rule Details
 
-This rule allows developers to enforce the presence of common header content
-(e.g. copyright information) while preserving pragma expressions included
-in the same comment block.
+This rule allows developers to enforce the format and presence of common header
+content (e.g. copyright information) while preserving pragma expressions
+included in the same comment block.
 
 Examples of **incorrect** code for this rule:
 
@@ -29,7 +29,7 @@ Configuration:
 ```json
 {
   "rules": {
-    "headers/header-presence": [
+    "headers/header-format": [
       "error",
       {
         "source": "string",
@@ -61,7 +61,7 @@ Configuration:
 ```json
 {
   "rules": {
-    "headers/header-presence": [
+    "headers/header-format": [
       "error",
       {
         "source": "file",
@@ -102,17 +102,17 @@ module.exports = 1701;
 
 ### Options
 
-| Name             | Type               | Required                | Default                                                | Description                                                                                                                         |
-| ---------------- | ------------------ | ----------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| source           | "file" \| "string" | Yes                     |                                                        | Indicates how the header content is supplied.                                                                                       |
-| style            | "line" \| "jsdoc"  | No                      | "jsdoc"                                                | Indicates the comment style to enforce. A leading line-style comment block may have lines separated by no more than one empty line. |
-| content          | string             | When `source: "string"` |                                                        | The string to enforce in the header comment.                                                                                        |
-| path             | string             | When `source: "file"`   |                                                        | The path to a file containing the header content to enforce.                                                                        |
-| preservePragmas  | boolean            | No                      | `true`                                                 | Preserves existing pragma expressions in leading comments when updating header. No effect when `style: "line"`                      |
-| blockPrefix      | string             | No                      | "\*" + newline when `style: "jsdoc"`                   | Content at the start of the leading comment block.                                                                                  |
-| blockSuffix      | string             | No                      | newline + " " when `style: "jsdoc"`                    | Content at the end of the leading comment block.                                                                                    |
-| linePrefix       | string             | No                      | " \* " when `style: "jsdoc"`, " " when `style: "line"` | Content prepended to the start of each line of content.                                                                             |
-| trailingNewlines | number             | No                      |                                                        | Number of empty lines to enforce after the leading comment.                                                                         |
+| Name             | Type               | Required                | Default                                                | Description                                                                                                                                                          |
+| ---------------- | ------------------ | ----------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source           | "file" \| "string" | Yes                     |                                                        | Indicates how the header content is supplied.                                                                                                                        |
+| style            | "line" \| "jsdoc"  | No                      | "jsdoc"                                                | Indicates the comment style to enforce. A leading line-style comment block will only include adjacent line comments, although a line comment's content may be empty. |
+| content          | string             | When `source: "string"` |                                                        | The string to enforce in the header comment.                                                                                                                         |
+| path             | string             | When `source: "file"`   |                                                        | The path to a file containing the header content to enforce.                                                                                                         |
+| preservePragmas  | boolean            | No                      | `true`                                                 | Preserves existing pragma expressions in leading comments when updating header. No effect when `style: "line"`.                                                      |
+| blockPrefix      | string             | No                      | "\*" + newline when `style: "jsdoc"`                   | Content at the start of the leading comment block.                                                                                                                   |
+| blockSuffix      | string             | No                      | newline + " " when `style: "jsdoc"`                    | Content at the end of the leading comment block.                                                                                                                     |
+| linePrefix       | string             | No                      | " \* " when `style: "jsdoc"`, " " when `style: "line"` | Content prepended to the start of each line of content.                                                                                                              |
+| trailingNewlines | number             | No                      |                                                        | Number of empty lines to enforce after the leading comment.                                                                                                          |
 
 ## When Not To Use It
 

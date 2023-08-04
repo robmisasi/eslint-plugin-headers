@@ -119,4 +119,17 @@ describe("CommentBlockMatcher", () => {
     );
     assert(!result);
   });
+
+  it("Correctly fails a partial content match", () => {
+    const config = {
+      linePrefix: " ",
+      style: "line",
+      eol: "\n",
+      expectedLines: ["This is a", "split comment"],
+    };
+
+    const tokens = [{ value: " This is a" }];
+    const result = new CommentBlockMatcher(config).match(tokens);
+    assert(!result);
+  });
 });
