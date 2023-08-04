@@ -1,9 +1,14 @@
 # eslint-plugin-headers
 
-A flexible plugin for checking, inserting, and formatting file headers.
+A flexible and `--fix`able rule for checking, inserting, and formatting file
+headers.
 
-Useful for enforcing and updating copyright notices while preserving
-pragma expressions in leading content blocks.
+Supports configurable usage of block or line comments, custom comment block
+prefixes and suffixes, custom line prefixes, and spacing between the header
+and code.
+
+Useful for inserting, enforcing, and updating copyright or licensing notices
+while preserving pragma expressions in leading content blocks.
 
 ## Installation
 
@@ -84,8 +89,8 @@ Options are supplied through a single object with the following properties:
 
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).
 
-| Name                                             | Description                                                                              | 🔧  |
-| :----------------------------------------------- | :--------------------------------------------------------------------------------------- | :-- |
-| [header-presence](docs/rules/header-presence.md) | Verifies the presence of a particular string in a file's first docblock or comment block | 🔧  |
+| Name                                         | Description                                                        | 🔧  |
+| :------------------------------------------- | :----------------------------------------------------------------- | :-- |
+| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧  |
 
 <!-- end auto-generated rules list -->
