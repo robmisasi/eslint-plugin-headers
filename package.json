@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-headers",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A flexible and `--fix`able rule for checking, inserting, and formatting file headers.",
   "repository": {
     "type": "git",

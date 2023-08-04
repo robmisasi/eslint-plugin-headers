@@ -246,5 +246,18 @@ ruleTester.run("header-presence", rule, {
       errors: [{ messageId: "trailingNewlinesMismatch" }],
       output: "/**\n * This is a header.\n */\n\n\nmodule.exports = 42;",
     },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is a header with custom trailing newlines.",
+          trailingNewlines: 2,
+        },
+      ],
+      code: "module.exports = 42;\n",
+      errors: [{ messageId: "missingHeader" }],
+      output:
+        "/**\n * This is a header with custom trailing newlines.\n */\n\nmodule.exports = 42;\n",
+    },
   ],
 });
