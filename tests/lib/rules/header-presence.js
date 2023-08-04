@@ -125,6 +125,16 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/**\n # This is the header\n */\nmodule.exports = 42;",
     },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is the header",
+          trailingNewlines: 3,
+        },
+      ],
+      code: "/**\n * This is the header\n */\n\n\nmodule.exports = 42;",
+    },
   ],
 
   invalid: [
@@ -210,6 +220,18 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * This is a header.\n */\nmodule.exports = 42;",
       errors: [{ messageId: "headerContentMismatch" }],
       output: "/**\n * This is a header\nblockSuffix*/\nmodule.exports = 42;",
+    },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is a header.",
+          trailingNewlines: 3,
+        },
+      ],
+      code: "/**\n * This is a header.\n */\nmodule.exports = 42;",
+      errors: [{ messageId: "trailingNewlinesMismatch" }],
+      output: "/**\n * This is a header.\n */\n\n\nmodule.exports = 42;",
     },
   ],
 });

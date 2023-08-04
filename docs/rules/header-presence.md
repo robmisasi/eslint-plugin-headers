@@ -1,6 +1,6 @@
 # Verifies the presence of a particular string in a file's first docblock or comment block (`headers/header-presence`)
 
-🔧💡 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix) and manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
 <!-- end auto-generated rule header -->
 
@@ -69,26 +69,17 @@ module.exports = 1701;
 
 ### Options
 
-**source**: either `file` or `string`. Indicates the content to enforce
-as a header.
-
-**style**: either `line` or `jsdoc`. Indicates comment style to enforce.
-Defaults to `jsdoc`.
-
-**content**: Required when `source: "string"`. The string to enforce in the
-header comment.
-
-**path**: Required when `source: "file"`. Path to a file containing content
-to enforce in a header comment.
-
-**preservePragmas**: boolean, preserves pragma expressions in leading
-comments when updating header. Defaults to `true`. No effect when `style: "line"`.
-
-**blockPrefix**: string, prepended to the start of the comment block.
-
-**blockSuffix**: string, appended at the end of the comment block.
-
-**linePrefix**: string, prepended to the start of each line of content.
+| Name             | Type               | Required                | Default                                                | Description                                                                                                                         |
+| ---------------- | ------------------ | ----------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| source           | "file" \| "string" | Yes                     |                                                        | Indicates how the header content is supplied.                                                                                       |
+| style            | "line" \| "jsdoc"  | No                      | "jsdoc"                                                | Indicates the comment style to enforce. A leading line-style comment block may have lines separated by no more than one empty line. |
+| content          | string             | When `source: "string"` |                                                        | The string to enforce in the header comment.                                                                                        |
+| path             | string             | When `source: "file"`   |                                                        | The path to a file containing the header content to enforce.                                                                        |
+| preservePragmas  | boolean            | No                      | `true`                                                 | Preserves existing pragma expressions in leading comments when updating header. No effect when `style: "line"`                      |
+| blockPrefix      | string             | No                      | "\*" + newline when `style: "jsdoc"`                   | Content at the start of the leading comment block.                                                                                  |
+| blockSuffix      | string             | No                      | newline + " " when `style: "jsdoc"`                    | Content at the end of the leading comment block.                                                                                    |
+| linePrefix       | string             | No                      | " \* " when `style: "jsdoc"`, " " when `style: "line"` | Content prepended to the start of each line of content.                                                                             |
+| trailingNewlines | number             | No                      |                                                        | Number of empty lines to enforce after the leading comment.                                                                         |
 
 ## When Not To Use It
 
