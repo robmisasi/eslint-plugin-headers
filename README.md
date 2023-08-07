@@ -50,7 +50,7 @@ Then configure the rules you want to use under the rules section.
 }
 ```
 
-**Example:**
+**Example 0:**
 
 Using the configuration from above, here's a file without a matching header:
 
@@ -63,6 +63,30 @@ When the fix is applied, the file now appears so:
 ```js
 /**
  * Copyright 2023. All rights reserved.
+ */
+module.exports = 42;
+```
+
+**Example 1:**
+
+Using the same configuration, this file already has a header, this one containing pragmas:
+
+```js
+/**
+ * @fileoverview This file contains a magic number.
+ * @author Rob Misasi
+ */
+module.exports = 42;
+```
+
+When the fix is applied, the file now appears so:
+
+```js
+/**
+ * Copyright 2023. All rights reserved.
+ *
+ * @fileoverview this file contains a magic number.
+ * @author Rob Misasi
  */
 module.exports = 42;
 ```
