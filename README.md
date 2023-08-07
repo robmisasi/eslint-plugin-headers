@@ -85,7 +85,7 @@ When the fix is applied, the file now appears so:
 /**
  * Copyright 2023. All rights reserved.
  *
- * @fileoverview this file contains a magic number.
+ * @fileoverview This file contains a magic number.
  * @author Rob Misasi
  */
 module.exports = 42;
