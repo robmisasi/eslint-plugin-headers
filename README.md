@@ -107,6 +107,10 @@ Options are supplied through a single object with the following properties:
 | linePrefix       | string             | No                      | " \* " when `style: "jsdoc"`, " " when `style: "line"` | Content prepended to the start of each line of content.                                                                                                              |
 | trailingNewlines | number             | No                      |                                                        | Number of empty lines to enforce after the leading comment.                                                                                                          |
 
+## Future
+
+* Add support for common pragma expressions that don't utilize the `@` symbol (e.g. eslint-disable)
+
 ## Rules
 
 <!-- begin auto-generated rules list -->
