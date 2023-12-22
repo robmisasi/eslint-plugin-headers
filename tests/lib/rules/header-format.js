@@ -135,6 +135,25 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/**\n * This is the header\n */\n\n\nmodule.exports = 42;",
     },
+    {
+      options: [
+        {
+          source: "file",
+          path: path.join(__dirname, "../../example-multiparagraph-header.txt"),
+        },
+      ],
+      code: "/**\n * This is line one.\n * This is line two.\n *\n * This is the second paragraph.\n */\nmodule.exports = 42;",
+    },
+    {
+      options: [
+        {
+          source: "file",
+          path: path.join(__dirname, "../../example-multiparagraph-header.txt"),
+          style: "line",
+        },
+      ],
+      code: "// This is line one.\n// This is line two.\n//\n// This is the second paragraph.\nmodule.exports = 42;",
+    },
   ],
 
   invalid: [

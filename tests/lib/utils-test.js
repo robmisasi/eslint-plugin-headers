@@ -5,7 +5,7 @@ const assert = require("assert");
 const { appendNewlines, getEolCharacter } = require("../../lib/utils");
 
 describe("utils", () => {
-  it("correctly formats text with newlines", () => {
+  it("Correctly formats text with newlines", () => {
     const block = `/**\n * This is a comment.\n */`;
     const expectedBlock = `${block}\n`;
 
@@ -14,7 +14,7 @@ describe("utils", () => {
     assert.equal(actualBlock, expectedBlock);
   });
 
-  it("gets the correct End of Line character", () => {
+  it("Gets the correct End of Line character", () => {
     assert.equal(getEolCharacter("This is some code\n"), "\n");
     assert.equal(
       getEolCharacter("This is some code.\r\nAnd some more code."),
