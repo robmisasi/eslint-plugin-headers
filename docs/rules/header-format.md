@@ -6,14 +6,41 @@
 
 While there are several rules that enforce the existence of headers in source
 files, these often conflict with tools that use or add preprocessor directives
-or pragmas embedded in these comments (e.g. jest). This rule exists to enforce
-the existence of specific header content while maintaining these directives.
+or pragmas embedded in these comments (e.g. jest and `@jest-environment`). This
+rule exists to enforce the existence of specific header content while
+maintaining these directives.
 
 ## Rule Details
 
 This rule allows developers to enforce the format and presence of common header
 content (e.g. copyright information) while preserving pragma expressions
 included in the same comment block.
+
+### Templates
+
+The provided header content can be formatted with variable information using
+the `variables` configuration option. Keys within the header content must be
+wrapped in braces to be formatted properly. For example, the configuration:
+
+```json
+{
+  ...
+  "content": "This is an {exampleKey}.",
+  "variables": {
+    "exampleKey": "example value"
+  }
+}
+```
+
+produces the following header:
+
+```js
+/**
+ * This is an example value.
+ */
+```
+
+### Examples
 
 Examples of **incorrect** code for this rule:
 
@@ -23,7 +50,7 @@ module.exports = 42;
 
 Examples of **correct** code for this rule:
 
-**Example 0:**
+**Example 0: Enforcing content**
 Configuration:
 
 ```json
@@ -55,7 +82,7 @@ Fixed file:
 module.exports = 42;
 ```
 
-**Example 1:**
+**Example 1: Enforcing content from a file**
 Configuration:
 
 ```json
@@ -84,7 +111,6 @@ Original file:
 /**
  * @author James T. Kirk
  */
-
 module.exports = 1701;
 ```
 
@@ -96,8 +122,48 @@ Fixed file:
  *
  * @author James T. Kirk
  */
-
 module.exports = 1701;
+```
+
+**Example 2: Using template variables**
+Configuration:
+
+```json
+{
+  "rules": {
+    "headers/header-format": [
+      "error",
+      {
+        "source": "string",
+        "content": "Copyright Star Date {stardate} {company}. All rights reserved.",
+        "variables": {
+          "stardate": "101012.2",
+          "company": "United Federation of Planets"
+        }
+      }
+    ]
+  }
+}
+```
+
+Original file:
+
+```js
+/**
+ * @author Jean-Luc Picard
+ */
+module.exports = "1701-D";
+```
+
+Fixed file:
+
+```js
+/**
+ * Copyright Star Date 101012.2 United Federation of Planets. All rights reserved.
+ *
+ * @author Jean-Luc Picard
+ */
+module.exports = "1701-D";
 ```
 
 ### Options
@@ -113,7 +179,9 @@ module.exports = 1701;
 | blockSuffix      | string             | No                      | newline + " " when `style: "jsdoc"`                    | Content at the end of the leading comment block.                                                                                                                     |
 | linePrefix       | string             | No                      | " \* " when `style: "jsdoc"`, " " when `style: "line"` | Content prepended to the start of each line of content.                                                                                                              |
 | trailingNewlines | number             | No                      |                                                        | Number of empty lines to enforce after the leading comment.                                                                                                          |
+| variables        | object             | No                      |                                                        | The keys to find and values to fill when formatting the provided header. Values must be strings.                                                                     |
 
 ## When Not To Use It
 
-Do not use this rule if you have no use for enforcing content in a file header.
+Do not use this rule if you have no use for enforcing leading text content in a
+file header.

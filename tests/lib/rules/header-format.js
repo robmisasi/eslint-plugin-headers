@@ -136,6 +136,18 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/**\n * This is a header\n */\n\n/**\n * Documentation\n */\nmodule.exports = 42;\n",
     },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is a {template}",
+          variables: {
+            template: "header",
+          },
+        },
+      ],
+      code: "/**\n * This is a header\n */\nmodule.exports = 42;\n",
+    },
   ],
 
   invalid: [
@@ -259,6 +271,20 @@ ruleTester.run("header-presence", rule, {
       errors: [{ messageId: "missingHeader" }],
       output:
         "/**\n * This is a header with custom trailing newlines.\n */\n\nmodule.exports = 42;\n",
+    },
+    {
+      options: [
+        {
+          source: "string",
+          content: "This is a {template}",
+          variables: {
+            template: "header",
+          },
+        },
+      ],
+      code: "/**\n * This is a bad header\n */\nmodule.exports = 42;\n",
+      errors: [{ messageId: "headerContentMismatch" }],
+      output: "/**\n * This is a header\n */\nmodule.exports = 42;\n",
     },
   ],
 });

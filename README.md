@@ -3,9 +3,9 @@
 A flexible and `--fix`able rule for checking, inserting, and formatting file
 headers.
 
-Supports configurable usage of block or line comments, custom comment block
-prefixes and suffixes, custom line prefixes, and spacing between the header
-and code.
+Supports variable content injection, configurable usage of block or line
+comments, custom comment block prefixes and suffixes, custom line prefixes,
+and spacing between the header and code.
 
 Useful for inserting, enforcing, and updating copyright or licensing notices
 while preserving pragma expressions in leading content blocks.
@@ -43,7 +43,7 @@ Then configure the rules you want to use under the rules section.
       "error",
       {
         "source": "string",
-        "content": "Copyright 2023. All rights reserved."
+        "content": "Copyright 2024. All rights reserved."
       }
     ]
   }
@@ -62,7 +62,7 @@ When the fix is applied, the file now appears so:
 
 ```js
 /**
- * Copyright 2023. All rights reserved.
+ * Copyright 2024. All rights reserved.
  */
 module.exports = 42;
 ```
@@ -83,10 +83,49 @@ When the fix is applied, the file now appears so:
 
 ```js
 /**
- * Copyright 2023. All rights reserved.
+ * Copyright 2024. All rights reserved.
  *
  * @fileoverview This file contains a magic number.
  * @author Rob Misasi
+ */
+module.exports = 42;
+```
+
+**Example 2:**
+Using the following configuration, variable values can be injected into the provided header:
+
+```json
+{
+  "rules": {
+    "headers/header-format": [
+      "error",
+      {
+        "source": "string",
+        "content": "Copyright {year} {company}. All rights reserved.",
+        "variables": {
+          "year": "2077",
+          "company": "Software Incorporated"
+        }
+      }
+    ]
+  }
+}
+```
+
+We can then apply a fix to the following file:
+
+```js
+/**
+ * Copyright 1947 Hardware LLC. All rights reserved.
+ */
+module.exports = 42;
+```
+
+And get the resulting header:
+
+```js
+/**
+ * Copyright 2077 Software Incorporated. All rights reserved.
  */
 module.exports = 42;
 ```
@@ -106,6 +145,7 @@ Options are supplied through a single object with the following properties:
 | blockSuffix      | string             | No                      | newline + " " when `style: "jsdoc"`                    | Content at the end of the leading comment block.                                                                                                                     |
 | linePrefix       | string             | No                      | " \* " when `style: "jsdoc"`, " " when `style: "line"` | Content prepended to the start of each line of content.                                                                                                              |
 | trailingNewlines | number             | No                      |                                                        | Number of empty lines to enforce after the leading comment.                                                                                                          |
+| variables        | object             | No                      |                                                        | The keys to find and values to fill when formatting the provided header. Values must be strings.                                                                     |
 
 ## Future
 
@@ -117,8 +157,8 @@ Options are supplied through a single object with the following properties:
 
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).
 
-| Name                                         | Description                                                        | 🔧  |
-| :------------------------------------------- | :----------------------------------------------------------------- | :-- |
-| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧  |
+| Name                                         | Description                                                        | 🔧    |
+| :------------------------------------------- | :----------------------------------------------------------------- | :--- |
+| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧    |
 
 <!-- end auto-generated rules list -->
