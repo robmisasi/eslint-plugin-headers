@@ -155,4 +155,25 @@ describe("CommentBlockMatcher", () => {
     // Assert
     assert(!result);
   });
+
+  it("Correctly matches content with mixed line endings", () => {
+    // Arrange
+    const testLines = ["This is line one", "This is line two"];
+    const config = {
+      blockPrefix: "*\n",
+      blockSuffix: "\n ",
+      linePrefix: " * ",
+      style: "jsdoc",
+      expectedLines: testLines,
+    };
+    const tokens = [
+      { value: "*\r\n * This is line one\r\n * This is line two\r\n " },
+    ];
+
+    // Act
+    const result = new CommentBlockMatcher(config).match(tokens);
+
+    // Assert
+    assert(result);
+  });
 });

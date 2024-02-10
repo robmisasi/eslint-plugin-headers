@@ -21,6 +21,7 @@ const ruleTester = new RuleTester();
 ruleTester.run("header-presence", rule, {
   valid: [
     {
+      name: "Matches an expected jsdoc header",
       options: [
         {
           source: "string",
@@ -30,6 +31,7 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * This is the expected header comment.\n */\n\nmodule.exports = 42;\n",
     },
     {
+      name: "Matches an expected line-style header",
       options: [
         {
           source: "string",
@@ -40,6 +42,7 @@ ruleTester.run("header-presence", rule, {
       code: "// This is the expected header.\n\nmodule.exports = 42;\n",
     },
     {
+      name: "Matches multiline header content",
       options: [
         {
           source: "string",
@@ -50,15 +53,7 @@ ruleTester.run("header-presence", rule, {
       code: "// This is the expected line 1.\n// This is line 2.\nmodule.exports = 42;\n",
     },
     {
-      options: [
-        {
-          source: "string",
-          content: "This is the expected header comment with carriage returns.",
-        },
-      ],
-      code: "/**\r\n * This is the expected header comment with carriage returns.\r\n */\r\n\r\nmodule.exports = 42;\r\n",
-    },
-    {
+      name: "Matches a header agnostic to EoL characters",
       options: [
         {
           source: "string",
@@ -69,6 +64,7 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * This is the expected header comment\n * with a different EoL.\n */\n\nmodule.exports = 42;\n",
     },
     {
+      name: "Matches a header with correct content and a pragma expression",
       options: [
         {
           source: "string",
@@ -78,6 +74,7 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * This is the expected header comment with pragma.\n *\n * @jest-environment jsdom\n */\n\nmodule.exports = 42;\n",
     },
     {
+      name: "Matches a header with content from a file",
       options: [
         {
           source: "file",
@@ -87,6 +84,7 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * This is the expected header.\n */\n\nmodule.exports = 42;\n",
     },
     {
+      name: "Matches header in file with a shebang",
       options: [
         {
           source: "string",
@@ -96,6 +94,7 @@ ruleTester.run("header-presence", rule, {
       code: "#! /usr/bin/node\n/**\n * This is the expected header with shebang.\n */\n\nmodule.exports = 42;",
     },
     {
+      name: "Matches a custom blockPrefix",
       options: [
         {
           source: "string",
@@ -106,6 +105,7 @@ ruleTester.run("header-presence", rule, {
       code: "/*blockPrefix\n * This is the header\n */\nmodule.exports = 42;",
     },
     {
+      name: "Matches a custom blockSuffix",
       options: [
         {
           source: "string",
@@ -116,6 +116,7 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * This is the header\nblockSuffix*/\nmodule.exports = 42;",
     },
     {
+      name: "Matches a custom linePrefix",
       options: [
         {
           source: "string",
@@ -126,6 +127,7 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n # This is the header\n */\nmodule.exports = 42;",
     },
     {
+      name: "Matches custom trailing newlines",
       options: [
         {
           source: "string",
@@ -137,6 +139,7 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * This is a header\n */\n\n/**\n * Documentation\n */\nmodule.exports = 42;\n",
     },
     {
+      name: "Matches variable content",
       options: [
         {
           source: "string",
@@ -148,10 +151,34 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/**\n * This is a header\n */\nmodule.exports = 42;\n",
     },
+    {
+      name: "Matches a header with mismatched line endings",
+      options: [
+        {
+          source: "string",
+          content:
+            "This is line one.\nThis is line two.\n\nThis is line three.",
+        },
+      ],
+      code: "/**\r\n * This is line one.\r\n * This is line two.\r\n *\r * This is line three.\n */\nmodule.exports = 42;",
+    },
   ],
 
   invalid: [
     {
+      name: "Fixes a missing header in an empty file",
+      options: [
+        {
+          source: "string",
+          content: "This is a header.",
+        },
+      ],
+      code: "",
+      errors: [{ messageId: "missingHeader" }],
+      output: "/**\n * This is a header.\n */\n",
+    },
+    {
+      name: "Fixes a missing header",
       options: [
         {
           source: "string",
@@ -164,6 +191,7 @@ ruleTester.run("header-presence", rule, {
         "/**\n * This is the expected header comment.\n */\nmodule.exports = 42;\n",
     },
     {
+      name: "Fixes a header with mismatched content",
       options: [
         {
           source: "string",
@@ -176,6 +204,7 @@ ruleTester.run("header-presence", rule, {
         "/**\n * This is the expected header comment.\n */\nmodule.exports = 42;\n",
     },
     {
+      name: "Adds a line-comment header when expected content is split by too many newlines",
       options: [
         {
           source: "string",
@@ -189,6 +218,7 @@ ruleTester.run("header-presence", rule, {
         "// This is a\n// split comment\n\n// split comment\nmodule.exports = 42;\n",
     },
     {
+      name: "Replaces the leading header when the leading header does not match expected content",
       options: [
         {
           source: "string",
@@ -200,6 +230,7 @@ ruleTester.run("header-presence", rule, {
       output: "/**\n * This is a header\n */\nmodule.exports = 42;\n",
     },
     {
+      name: "Fixes missing header content when header includes a pragma expression",
       options: [
         {
           source: "string",
@@ -212,6 +243,7 @@ ruleTester.run("header-presence", rule, {
         "/**\n * This is a header\n *\n * @jest-environment jsdom\n */\n\nmodule.exports = 42;\n",
     },
     {
+      name: "Removes pragma expressions when configured to do so",
       options: [
         {
           source: "string",
@@ -224,6 +256,7 @@ ruleTester.run("header-presence", rule, {
       output: "/**\n * This is a header\n */\n\nmodule.exports = 42;\n",
     },
     {
+      name: "Fixes a mismatched block prefix",
       options: [
         {
           source: "string",
@@ -236,6 +269,7 @@ ruleTester.run("header-presence", rule, {
       output: "/*blockPrefix\n * This is a header\n */\nmodule.exports = 42;",
     },
     {
+      name: "Fixes a mismatched block suffix",
       options: [
         {
           source: "string",
@@ -248,6 +282,7 @@ ruleTester.run("header-presence", rule, {
       output: "/**\n * This is a header\nblockSuffix*/\nmodule.exports = 42;",
     },
     {
+      name: "Fixes mismatched trailing newlines",
       options: [
         {
           source: "string",
@@ -260,6 +295,7 @@ ruleTester.run("header-presence", rule, {
       output: "/**\n * This is a header.\n */\n\n\nmodule.exports = 42;",
     },
     {
+      name: "Fixes a missing header and appends configured trailing newlines",
       options: [
         {
           source: "string",
@@ -273,6 +309,7 @@ ruleTester.run("header-presence", rule, {
         "/**\n * This is a header with custom trailing newlines.\n */\n\nmodule.exports = 42;\n",
     },
     {
+      name: "Fixes a header with mismatched variable content",
       options: [
         {
           source: "string",
