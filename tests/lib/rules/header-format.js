@@ -323,5 +323,18 @@ ruleTester.run("header-presence", rule, {
       errors: [{ messageId: "headerContentMismatch" }],
       output: "/**\n * This is a header\n */\nmodule.exports = 42;\n",
     },
+    {
+      name: "Fixes a file with a shebang and no header",
+      options: [
+        {
+          source: "string",
+          content: "This is a header",
+        },
+      ],
+      code: "#! /usr/bin/node\nmodule.exports = 42;\n",
+      errors: [{ messageId: "missingHeader" }],
+      output:
+        "#! /usr/bin/node\n/**\n * This is a header\n */\nmodule.exports = 42;\n",
+    },
   ],
 });
