@@ -15,11 +15,12 @@ This plugin is best used with a formatter like
 
 ## Motivation
 
-This plugin aims to be a successor to the popular plugin
+This plugin aims to be a successor to the popular but defunct plugin
 [eslint-plugin-header](https://www.npmjs.com/package/eslint-plugin-header).
 `eslint-plugin-headers` strives to implement the same features as
-`eslint-plugin-header` where possible, while sensibly extending features and
-supporting modern JavaScript frameworks.
+`eslint-plugin-header` where possible, while sensibly extending features,
+supporting modern JavaScript frameworks, and maintaining compatibility with
+other common tools.
 
 ## Installation
 
