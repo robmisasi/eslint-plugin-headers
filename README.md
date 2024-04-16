@@ -10,6 +10,17 @@ and spacing between the header and code.
 Useful for inserting, enforcing, and updating copyright or licensing notices
 while preserving pragma expressions in leading content blocks.
 
+This plugin is best used with a formatter like
+[prettier](https://www.npmjs.com/package/prettier).
+
+## Motivation
+
+This plugin aims to be a successor to the popular plugin
+[eslint-plugin-header](https://www.npmjs.com/package/eslint-plugin-header).
+`eslint-plugin-headers` strives to implement the same features as
+`eslint-plugin-header` where possible, while sensibly extending features and
+supporting modern JavaScript frameworks.
+
 ## Installation
 
 You'll first need to install [ESLint](https://eslint.org/):
