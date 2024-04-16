@@ -26,6 +26,45 @@ npm install eslint-plugin-headers --save-dev
 
 ## Usage
 
+### Flat config
+
+Import the default export from the `estlin-plugin-headers` module. Add the
+`headers` key to the plugins section of your config object in the configuration
+file. You can omit the `eslint-plugin-` prefix:
+
+```js
+import headers from "eslint-plugin-headers";
+
+export default [{
+  plugins: {
+    headers
+  }
+}]
+```
+
+Then configure the rules you want to use under the rules section.
+
+```js
+import headers from "eslint-plugin-headers";
+
+export default [{
+  plugins: {
+    headers
+  }
+  rules: {
+    "headers/header-format": [
+      "error",
+      {
+        source: "string",
+        content: "Copyright 2024. All rights reserved."
+      }
+    ]
+  }
+}]
+```
+
+### Legacy `.eslintrc` config
+
 Add `headers` to the plugins section of your `.eslintrc` configuration file. You can omit the `eslint-plugin-` prefix:
 
 ```json
@@ -49,6 +88,8 @@ Then configure the rules you want to use under the rules section.
   }
 }
 ```
+
+## Examples
 
 **Example 0:**
 

@@ -5,6 +5,7 @@
 "use strict";
 
 const path = require("path");
+const os = require("os");
 
 //------------------------------------------------------------------------------
 // Requirements
@@ -175,7 +176,7 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "",
       errors: [{ messageId: "missingHeader" }],
-      output: "/**\n * This is a header.\n */\n",
+      output: `/**${os.EOL} * This is a header.${os.EOL} */${os.EOL}`,
     },
     {
       name: "Fixes a missing header",
