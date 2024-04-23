@@ -245,7 +245,7 @@ setting the flag.
 | linePrefix       | string               | No                      | [See below](#default-prefixes-and-suffixes) | Content prepended to the start of each line of content.                                                                                                                                                     |
 | trailingNewlines | number               | No                      |                                             | Number of empty lines to enforce after the leading comment.                                                                                                                                                 |
 | variables        | object               | No                      |                                             | The keys to find and values to fill when formatting the provided header. Values must be strings.                                                                                                            |
-| enableVueSupport | boolean              | No                      | `false`                                     | **EXPERIMENTAL!**  Enable support for parsing `.vue` files. [See above](#usage-with-vue) for details.                                                                                                       |
+| enableVueSupport | boolean              | No                      | `false`                                     | **EXPERIMENTAL!**  Enable support for parsing `.vue` files. Must be used with `vue-eslint-parser`. [See above](#usage-with-vue) for details.                                                                |
 
 #### Default Prefixes and Suffixes
 
