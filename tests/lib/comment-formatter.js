@@ -33,6 +33,20 @@ describe("CommentFormatter", () => {
     assert.equal(actualString, expectedString);
   });
 
+  it("Formats a default HTML comment correctly", () => {
+    // Arrange
+    const lines = ["Line1", "Line2"];
+    const expectedString = "<!--\n  Line1\n  Line2\n-->";
+
+    // Act
+    const actualString = new CommentFormatter(lines, { eol: "\n" }).format(
+      "html",
+    );
+
+    // Assert
+    assert.equal(actualString, expectedString);
+  });
+
   it("Formats a block suffix correctly", () => {
     // Arrange
     const lines = ["Line1", "Line2"];
@@ -41,16 +55,19 @@ describe("CommentFormatter", () => {
       blockSuffix: blockSuffix,
       eol: "\n",
     });
-    const expectedBlockString = "/**\n * Line1\n * Line2blockSuffix*/";
-    const expectedLineString = "// Line1\n// Line2\n//blockSuffix";
+    const expectedBlockString = `/**\n * Line1\n * Line2${blockSuffix}*/`;
+    const expectedLineString = `// Line1\n// Line2\n//${blockSuffix}`;
+    const expectedHtmlString = `<!--\n  Line1\n  Line2${blockSuffix}-->`;
 
     // Act
     const actualBlockString = formatter.format("jsdoc");
     const actualLineString = formatter.format("line");
+    const actualHtmlString = formatter.format("html");
 
     // Assert
     assert.equal(actualBlockString, expectedBlockString);
     assert.equal(actualLineString, expectedLineString);
+    assert.equal(actualHtmlString, expectedHtmlString);
   });
 
   it("Formats a block prefix correctly", () => {
@@ -61,16 +78,19 @@ describe("CommentFormatter", () => {
       blockPrefix: blockPrefix,
       eol: "\n",
     });
-    const expectedBlockString = "/*blockPrefix * Line1\n * Line2\n */";
-    const expectedLineString = "//blockPrefix\n// Line1\n// Line2";
+    const expectedBlockString = `/*${blockPrefix} * Line1\n * Line2\n */`;
+    const expectedLineString = `//${blockPrefix}\n// Line1\n// Line2`;
+    const expectedHtmlString = `<!--${blockPrefix}  Line1\n  Line2\n-->`;
 
     // Act
     const actualBlockString = formatter.format("jsdoc");
     const actualLineString = formatter.format("line");
+    const actualHtmlString = formatter.format("html");
 
     // Assert
     assert.equal(actualBlockString, expectedBlockString);
     assert.equal(actualLineString, expectedLineString);
+    assert.equal(actualHtmlString, expectedHtmlString);
   });
 
   it("Formats a line prefix correctly", () => {
@@ -81,15 +101,18 @@ describe("CommentFormatter", () => {
       linePrefix: linePrefix,
       eol: "\n",
     });
-    const expectedBlockString = "/**\nlinePrefixLine1\nlinePrefixLine2\n */";
-    const expectedLineString = "//linePrefixLine1\n//linePrefixLine2";
+    const expectedBlockString = `/**\n${linePrefix}Line1\n${linePrefix}Line2\n */`;
+    const expectedLineString = `//${linePrefix}Line1\n//${linePrefix}Line2`;
+    const expectedHtmlString = `<!--\n${linePrefix}Line1\n${linePrefix}Line2\n-->`;
 
     // Act
     const actualBlockString = formatter.format("jsdoc");
     const actualLineString = formatter.format("line");
+    const actualHtmlString = formatter.format("html");
 
     // Assert
     assert.equal(actualBlockString, expectedBlockString);
     assert.equal(actualLineString, expectedLineString);
+    assert.equal(actualHtmlString, expectedHtmlString);
   });
 });
