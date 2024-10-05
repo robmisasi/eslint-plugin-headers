@@ -363,6 +363,18 @@ ruleTesterVue.run("header-presence-html", rule, {
       ],
       code: "<!--\n  This is a header\n-->\n<style>div { font-size: 2em; }</style>\n<template>\n  <div>This is content</div>\n</template>\n",
     },
+    {
+      name: "Correctly matches a multiline HTML comment header",
+      filename: "test.vue",
+      options: [
+        {
+          source: "string",
+          content: "This is a header\nwith another line",
+          ...enableVueOption,
+        },
+      ],
+      code: "<!--\n  This is a header\n  with another line\n-->\n<template>\n  <div>This is content</div>\n</template>\n",
+    },
   ],
   invalid: [
     {
