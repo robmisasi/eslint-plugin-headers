@@ -362,8 +362,8 @@ Expected/produced header:
 
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).
 
-| Name                                         | Description                                                        | 🔧    |
-| :------------------------------------------- | :----------------------------------------------------------------- | :--- |
-| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧    |
+| Name                                         | Description                                                        | 🔧 |
+| :------------------------------------------- | :----------------------------------------------------------------- | :- |
+| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧 |
 
 <!-- end auto-generated rules list -->
