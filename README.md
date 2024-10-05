@@ -47,11 +47,13 @@ file. You can omit the `eslint-plugin-` prefix:
 ```js
 import headers from "eslint-plugin-headers";
 
-export default [{
-  plugins: {
-    headers
-  }
-}]
+export default [
+  {
+    plugins: {
+      headers,
+    },
+  },
+];
 ```
 
 Then configure the rules you want to use under the rules section.
@@ -105,7 +107,23 @@ Then configure the rules you want to use under the rules section.
 
 **Example 0:**
 
-Using the configuration from above, here's a file without a matching header:
+Example Configuration:
+
+```json
+{
+  "rules": {
+    "headers/header-format": [
+      "error",
+      {
+        "source": "string",
+        "content": "Copyright 2024. All rights reserved."
+      }
+    ]
+  }
+}
+```
+
+Using the above configuration, here's a file without a matching header:
 
 ```js
 module.exports = 42;
@@ -187,22 +205,73 @@ module.exports = 42;
 
 Options are supplied through a single object with the following properties:
 
-| Name             | Type               | Required                | Default                                                | Description                                                                                                                                                          |
-| ---------------- | ------------------ | ----------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| source           | "file" \| "string" | Yes                     |                                                        | Indicates how the header content is supplied.                                                                                                                        |
-| style            | "line" \| "jsdoc"  | No                      | "jsdoc"                                                | Indicates the comment style to enforce. A leading line-style comment block will only include adjacent line comments, although a line comment's content may be empty. |
-| content          | string             | When `source: "string"` |                                                        | The string to enforce in the header comment.                                                                                                                         |
-| path             | string             | When `source: "file"`   |                                                        | The path to a file containing the header content to enforce.                                                                                                         |
-| preservePragmas  | boolean            | No                      | `true`                                                 | Preserves existing pragma expressions in leading comments when updating header. No effect when `style: "line"`.                                                      |
-| blockPrefix      | string             | No                      | "\*" + newline when `style: "jsdoc"`                   | Content at the start of the leading comment block.                                                                                                                   |
-| blockSuffix      | string             | No                      | newline + " " when `style: "jsdoc"`                    | Content at the end of the leading comment block.                                                                                                                     |
-| linePrefix       | string             | No                      | " \* " when `style: "jsdoc"`, " " when `style: "line"` | Content prepended to the start of each line of content.                                                                                                              |
-| trailingNewlines | number             | No                      |                                                        | Number of empty lines to enforce after the leading comment.                                                                                                          |
-| variables        | object             | No                      |                                                        | The keys to find and values to fill when formatting the provided header. Values must be strings.                                                                     |
+| Name             | Type               | Required                | Default                                     | Description                                                                                                                                                          |
+| ---------------- | ------------------ | ----------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source           | "file" \| "string" | Yes                     |                                             | Indicates how the header content is supplied.                                                                                                                        |
+| style            | "line" \| "jsdoc"  | No                      | "jsdoc"                                     | Indicates the comment style to enforce. A leading line-style comment block will only include adjacent line comments, although a line comment's content may be empty. |
+| content          | string             | When `source: "string"` |                                             | The string to enforce in the header comment.                                                                                                                         |
+| path             | string             | When `source: "file"`   |                                             | The path to a file containing the header content to enforce.                                                                                                         |
+| preservePragmas  | boolean            | No                      | `true`                                      | Preserves existing pragma expressions in leading comments when updating header. No effect when `style: "line"`.                                                      |
+| blockPrefix      | string             | No                      | [See below](#default-prefixes-and-suffixes) | Content at the start of the leading comment block.                                                                                                                   |
+| blockSuffix      | string             | No                      | [See below](#default-prefixes-and-suffixes) | Content at the end of the leading comment block.                                                                                                                     |
+| linePrefix       | string             | No                      | [See below](#default-prefixes-and-suffixes) | Content prepended to the start of each line of content.                                                                                                              |
+| trailingNewlines | number             | No                      |                                             | Number of empty lines to enforce after the leading comment.                                                                                                          |
+| variables        | object             | No                      |                                             | The keys to find and values to fill when formatting the provided header. Values must be strings.                                                                     |
+
+#### Default Prefixes and Suffixes
+
+Example configuration:
+
+```js
+export default [
+  {
+    // ...
+    rules: {
+      "headers/header-format": [
+        "error",
+        {
+          source: "string",
+          content: "This is a header.",
+          // ...{Additional Configuration}
+        },
+      ],
+    },
+  },
+];
+```
+
+The subsequent section titles contain the additional configuration inserted
+above, and the resulting comment that will be produced.
+
+##### style: "line"
+
+Expected/produced header:
+
+```js
+// This is a header.
+```
+
+- Default block prefix: None
+- Default block suffix: None
+- Default line prefix: `" "`
+
+##### style: "jsdoc"
+
+Expected/produced header:
+
+```js
+/**
+ * This is a header.
+ */
+```
+
+- Default block prefix: `"*\n"`
+- Default block suffix: `"\n "`
+- Default line prefix: `" * "`
 
 ## Future
 
-* Add support for common pragma expressions that don't utilize the `@` symbol (e.g. eslint-disable)
+- Add support for common pragma expressions that don't utilize the `@` symbol (e.g. eslint-disable)
 
 ## Rules
 
@@ -210,8 +279,8 @@ Options are supplied through a single object with the following properties:
 
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).
 
-| Name                                         | Description                                                        | 🔧    |
-| :------------------------------------------- | :----------------------------------------------------------------- | :--- |
-| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧    |
+| Name                                         | Description                                                        | 🔧  |
+| :------------------------------------------- | :----------------------------------------------------------------- | :-- |
+| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧  |
 
 <!-- end auto-generated rules list -->

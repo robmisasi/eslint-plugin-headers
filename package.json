@@ -11,6 +11,7 @@
     "eslintplugin",
     "eslint-plugin",
     "header",
+    "headers",
     "license"
   ],
   "author": "Rob Misasi",
