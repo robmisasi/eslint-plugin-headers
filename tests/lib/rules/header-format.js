@@ -163,6 +163,21 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/**\r\n * This is line one.\r\n * This is line two.\r\n *\r * This is line three.\n */\nmodule.exports = 42;",
     },
+    {
+      name: "Matches options configured with falsy values",
+      options: [
+        {
+          source: "string",
+          content: "This is a header.",
+          style: "jsdoc",
+          blockPrefix: "",
+          blockSuffix: "",
+          linePrefix: "",
+          trailingNewlines: 0,
+        },
+      ],
+      code: "/*This is a header.*/module.exports = 42;\n",
+    },
   ],
 
   invalid: [
@@ -336,6 +351,23 @@ ruleTester.run("header-presence", rule, {
       errors: [{ messageId: "missingHeader" }],
       output:
         "#! /usr/bin/node\n/**\n * This is a header\n */\nmodule.exports = 42;\n",
+    },
+    {
+      name: "Fixes a file correctly when configured with falsy values",
+      options: [
+        {
+          source: "string",
+          content: "This is a header.",
+          style: "jsdoc",
+          blockPrefix: "",
+          blockSuffix: "",
+          linePrefix: "",
+          trailingNewlines: 0,
+        },
+      ],
+      code: "module.exports = 42;\n",
+      errors: [{ messageId: "missingHeader" }],
+      output: "/*This is a header.*/module.exports = 42;\n",
     },
   ],
 });
