@@ -62,7 +62,7 @@ import headers from "eslint-plugin-headers";
 export default [{
   plugins: {
     headers
-  }
+  },
   rules: {
     "headers/header-format": [
       "error",
