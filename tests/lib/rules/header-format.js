@@ -178,6 +178,28 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/*This is a header.*/module.exports = 42;\n",
     },
+    {
+      name: "Matches a pattern",
+      options: [
+        {
+          source: "string",
+          content: "This is the (word). This is the (number).",
+          style: "jsdoc",
+          blockPrefix: "",
+          blockSuffix: "",
+          linePrefix: "",
+          patterns: {
+            word: {
+              pattern: "\\w+",
+            },
+            number: {
+              pattern: "\\d+",
+            },
+          },
+        },
+      ],
+      code: "/*This is the expectedWord. This is the 2025.*/module.exports = 42;\n",
+    },
   ],
 
   invalid: [

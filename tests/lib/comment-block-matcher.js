@@ -176,4 +176,28 @@ describe("CommentBlockMatcher", () => {
     // Assert
     assert(result);
   });
+
+  it("Correctly matches configured patterns", () => {
+    // Arrange
+    const testPattern1Name = "testPattern";
+    const testPattern2Name = "otherPattern";
+    const testPattern1 = "\\d{4}";
+    const testPattern2 = "\\w+";
+    const expectedPattern1Value = "2014";
+    const expectedPattern2Value = "testWord";
+    const testExpectedContent = `Copyright (${testPattern1Name}). All rights reserved. (${testPattern2Name}). (bad)`;
+    const commentString = `Copyright ${expectedPattern1Value}. All rights reserved. ${expectedPattern2Value}. (bad)`;
+    const matcher = new CommentBlockMatcher({
+      patterns: {
+        [testPattern1Name]: { pattern: testPattern1 },
+        [testPattern2Name]: { pattern: testPattern2 },
+      },
+    });
+
+    // Act
+    const result = matcher.matchStrings(testExpectedContent, commentString);
+
+    // Assert
+    assert(result);
+  });
 });
