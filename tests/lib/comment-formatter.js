@@ -3,6 +3,7 @@
 const assert = require("assert");
 
 const CommentFormatter = require("../../lib/comment-formatter");
+const { getPatternIdentifier } = require("../../lib/utils");
 
 describe("CommentFormatter", () => {
   it("Formats a default block comment correctly", () => {
@@ -114,5 +115,32 @@ describe("CommentFormatter", () => {
     assert.equal(actualBlockString, expectedBlockString);
     assert.equal(actualLineString, expectedLineString);
     assert.equal(actualHtmlString, expectedHtmlString);
+  });
+
+  it("Formats pattern values correctly", () => {
+    // Arrange
+    const patternName = "testPattern";
+    const patternValues = ["patternValue1", "patternValue2"];
+    const lines = [
+      `First value:(${patternName})`,
+      `Next value:(${patternName})`,
+    ];
+    const expectedLines = `/**\n * ${lines[0].replace(
+      getPatternIdentifier(patternName),
+      patternValues[0],
+    )}\n * ${lines[1].replace(
+      getPatternIdentifier(patternName),
+      patternValues[1],
+    )}\n */`;
+    const formatter = new CommentFormatter(lines, {
+      eol: "\n",
+      patternValues: { [patternName]: patternValues },
+    });
+
+    // Act
+    const result = formatter.format("jsdoc");
+
+    // Assert
+    assert.equal(result, expectedLines);
   });
 });
