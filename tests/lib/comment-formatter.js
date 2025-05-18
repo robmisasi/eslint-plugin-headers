@@ -120,25 +120,58 @@ describe("CommentFormatter", () => {
   it("Formats pattern values correctly", () => {
     // Arrange
     const patternName = "testPattern";
-    const patternValues = ["patternValue1", "patternValue2"];
+    const patternValuesList = ["patternValue1", "patternValue2"];
+    const patternValuesMap = { [patternName]: patternValuesList };
     const lines = [
       `First value:(${patternName})`,
       `Next value:(${patternName})`,
     ];
     const expectedLines = `/**\n * ${lines[0].replace(
       getPatternIdentifier(patternName),
-      patternValues[0],
+      patternValuesList[0],
     )}\n * ${lines[1].replace(
       getPatternIdentifier(patternName),
-      patternValues[1],
+      patternValuesList[1],
     )}\n */`;
     const formatter = new CommentFormatter(lines, {
       eol: "\n",
-      patternValues: { [patternName]: patternValues },
+      defaultPatternValues: {
+        [patternName]: "testDefaultPatternValue",
+      },
     });
 
     // Act
-    const result = formatter.format("jsdoc");
+    const result = formatter.format("jsdoc", patternValuesMap);
+
+    // Assert
+    assert.equal(result, expectedLines);
+  });
+
+  it("Formats default pattern values correctly", () => {
+    // Arrange
+    const patternName = "testPattern";
+    const defaultPatternValue = "testDefaultPatternValue";
+    const patternValuesList = ["patternValue1"];
+    const defaultPatternValuesMap = { [patternName]: defaultPatternValue };
+    const patternValuesMap = { [patternName]: patternValuesList };
+    const lines = [
+      `First value:(${patternName})`,
+      `Next value:(${patternName})`,
+    ];
+    const expectedLines = `/**\n * ${lines[0].replace(
+      getPatternIdentifier(patternName),
+      patternValuesList[0],
+    )}\n * ${lines[1].replace(
+      getPatternIdentifier(patternName),
+      defaultPatternValue,
+    )}\n */`;
+    const formatter = new CommentFormatter(lines, {
+      eol: "\n",
+      defaultPatternValues: defaultPatternValuesMap,
+    });
+
+    // Act
+    const result = formatter.format("jsdoc", patternValuesMap);
 
     // Assert
     assert.equal(result, expectedLines);

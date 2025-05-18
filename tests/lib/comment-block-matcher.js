@@ -3,6 +3,7 @@
 const assert = require("assert");
 
 const CommentBlockMatcher = require("../../lib/comment-block-matcher");
+const { getPatternLocations } = require("../../lib/utils");
 
 describe("CommentBlockMatcher", () => {
   it("Correctly matches a starting pattern in a list of tokens", () => {
@@ -63,7 +64,7 @@ describe("CommentBlockMatcher", () => {
     );
 
     // Assert
-    assert(result);
+    assert(!result.mismatches);
   });
 
   it("Correctly matches a line comment block", () => {
@@ -82,7 +83,7 @@ describe("CommentBlockMatcher", () => {
     const result = new CommentBlockMatcher(config).match(tokens);
 
     // Assert
-    assert(result);
+    assert(!result.mismatches);
   });
 
   it("Correctly fails a mismatched suffix", () => {
@@ -110,7 +111,7 @@ describe("CommentBlockMatcher", () => {
     );
 
     // Assert
-    assert(!result);
+    assert(!!result.mismatches);
   });
 
   it("Correctly fails a mismatched body", () => {
@@ -136,7 +137,7 @@ describe("CommentBlockMatcher", () => {
     );
 
     // Assert
-    assert(!result);
+    assert(!!result.mismatches);
   });
 
   it("Correctly fails a partial content match", () => {
@@ -153,7 +154,7 @@ describe("CommentBlockMatcher", () => {
     const result = new CommentBlockMatcher(config).match(tokens);
 
     // Assert
-    assert(!result);
+    assert(result.mismatches);
   });
 
   it("Correctly matches content with mixed line endings", () => {
@@ -174,7 +175,7 @@ describe("CommentBlockMatcher", () => {
     const result = new CommentBlockMatcher(config).match(tokens);
 
     // Assert
-    assert(result);
+    assert(!result.mismatches);
   });
 
   it("Correctly matches configured patterns", () => {
@@ -198,6 +199,34 @@ describe("CommentBlockMatcher", () => {
     const result = matcher.matchStrings(testExpectedContent, commentString);
 
     // Assert
-    assert(result);
+    assert(!result);
+  });
+
+  it("Correctly identifies mismatched patterns", () => {
+    // Arrange
+    const testPattern1Name = "testPattern";
+    const testPattern2Name = "otherPattern";
+    const testPattern1 = "\\d{4}";
+    const testPattern2 = "\\w+";
+    const expectedPattern1Value = "invalid";
+    const expectedPattern2Value = "testWord";
+    const expectedContent = `Copyright (${testPattern1Name}). All rights reserved. (${testPattern2Name}). (bad)`;
+    const commentString = `Copyright ${expectedPattern1Value}. All rights reserved. ${expectedPattern2Value}. (bad)`;
+    const patterns = {
+      [testPattern1Name]: { pattern: testPattern1 },
+      [testPattern2Name]: { pattern: testPattern2 },
+    };
+    const patternLocations = getPatternLocations(expectedContent, patterns);
+    const matcher = new CommentBlockMatcher({ patterns });
+
+    // Act
+    const result = matcher.verifyPatternValues(
+      expectedContent,
+      commentString,
+      patternLocations,
+    );
+
+    // Assert
+    assert(result !== undefined);
   });
 });

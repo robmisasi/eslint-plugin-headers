@@ -391,6 +391,78 @@ ruleTester.run("header-presence", rule, {
       errors: [{ messageId: "missingHeader" }],
       output: "/*This is a header.*/module.exports = 42;\n",
     },
+    {
+      name: "Identifies a missing header when configured with a pattern and no default pattern value",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year)",
+          style: "jsdoc",
+          patterns: {
+            year: {
+              pattern: "\\d4",
+            },
+          },
+        },
+      ],
+      code: "module.exports = 42;\n",
+      errors: [{ messageId: "missingHeader" }],
+    },
+    {
+      name: "Identifies an invalid pattern correctly",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year)",
+          style: "jsdoc",
+          patterns: {
+            year: {
+              pattern: "\\d4",
+            },
+          },
+        },
+      ],
+      code: "/**\nCopyright 202\n */\nmodule.exports = 42;\n",
+      errors: [{ messageId: "headerContentMismatch" }],
+    },
+    {
+      name: "Fixes a missing header correctly when configured with a pattern and default value",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year)",
+          style: "jsdoc",
+          patterns: {
+            year: {
+              pattern: "\\d4",
+              defaultValue: "2025",
+            },
+          },
+        },
+      ],
+      code: "module.exports = 42;\n",
+      errors: [{ messageId: "missingHeader" }],
+      output: "/**\n * Copyright 2025\n */\nmodule.exports = 42;\n",
+    },
+    {
+      name: "Fixes a pattern mismatch correctly",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year)",
+          style: "jsdoc",
+          patterns: {
+            year: {
+              pattern: "\\d4",
+              defaultValue: "2025",
+            },
+          },
+        },
+      ],
+      code: "/**\n * Copyright 202\n */\nmodule.exports = 42;\n",
+      errors: [{ messageId: "headerContentMismatch" }],
+      output: "/**\n * Copyright 2025\n */\nmodule.exports = 42;\n",
+    },
   ],
 });
 

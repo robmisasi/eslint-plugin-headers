@@ -3,9 +3,9 @@
 A flexible and `--fix`able rule for checking, inserting, and formatting file
 headers.
 
-Supports variable content injection, configurable usage of block or line
-comments, custom comment block prefixes and suffixes, custom line prefixes,
-and spacing between the header and code.
+Supports variable content injection, regex pattern matching, configurable
+usage of block or line comments, custom comment block prefixes and suffixes,
+custom line prefixes, and spacing between the header and code.
 
 Useful for inserting, enforcing, and updating copyright or licensing notices
 while preserving pragma expressions in leading content blocks.
@@ -47,11 +47,13 @@ file. You can omit the `eslint-plugin-` prefix:
 ```js
 import headers from "eslint-plugin-headers";
 
-export default [{
-  plugins: {
-    headers
-  }
-}]
+export default [
+  {
+    plugins: {
+      headers,
+    },
+  },
+];
 ```
 
 Then configure the rules you want to use under the rules section.
@@ -59,20 +61,22 @@ Then configure the rules you want to use under the rules section.
 ```js
 import headers from "eslint-plugin-headers";
 
-export default [{
-  plugins: {
-    headers
+export default [
+  {
+    plugins: {
+      headers,
+    },
+    rules: {
+      "headers/header-format": [
+        "error",
+        {
+          source: "string",
+          content: "Copyright 2024. All rights reserved.",
+        },
+      ],
+    },
   },
-  rules: {
-    "headers/header-format": [
-      "error",
-      {
-        source: "string",
-        content: "Copyright 2024. All rights reserved."
-      }
-    ]
-  }
-}]
+];
 ```
 
 ### Legacy `.eslintrc` config
@@ -109,8 +113,8 @@ files, you must:
 
 1. Install the `vue-eslint-parser` package as a dev dependency.
 2. Specify the `vue-eslint-parser` in the configuration's
-`languageOptions.parser` field (or the `"parser"` field for legacy
-configurations), and
+   `languageOptions.parser` field (or the `"parser"` field for legacy
+   configurations), and
 3. Set the `enableVueSupport` flag for the appropriate rules.
 
 Example configuration:
@@ -122,7 +126,7 @@ import vueEslintParser from "vue-eslint-parser";
 export default [
   {
     plugins: {
-      headers 
+      headers,
     },
     files: ["**/*.vue"],
     rules: {
@@ -132,13 +136,13 @@ export default [
           source: "string",
           content: "This is a header.",
           enableVueSupport: true,
-        }
-      ]
+        },
+      ],
     },
     languageOptions: {
       parser: vueEslintParser,
     },
-  }
+  },
 ];
 ```
 
@@ -269,23 +273,77 @@ And get the resulting header:
 module.exports = 42;
 ```
 
+**Example 3:**
+Using the following configuration, patterns are used to validate content in existing headers:
+
+```json
+{
+  "rules": {
+    "headers/header-format": [
+      "error",
+      {
+        "source": "string",
+        "content": "Copyright (year) {company}. All rights reserved.",
+        "variables": {
+          "company": "Contemporary Org"
+        },
+        "patterns": {
+          "year": {
+            "pattern": "\\d4",
+            "defaultValue": "2025"
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+The following file would validate successfully:
+
+```js
+/**
+ * Copyright 1985 Contemporary Org. All rights reserved.
+ */
+module.exports = 42;
+```
+
+Alternatively, the plugin can apply a fix to the following invalid file:
+
+```js
+/**
+ * Copyright 40000 Future Corp. All rights reserved.
+ */
+module.exports = 42;
+```
+
+And get the following header:
+
+```js
+/**
+ * Copyright 2025 Contemporary Org. All rights reserved.
+ */
+module.exports = 42;
+```
+
 ### Options
 
 Options are supplied through a single object with the following properties:
 
-| Name             | Type                 | Required                | Default                                     | Description                                                                                                                                                                                                 |
-| ---------------- | -------------------- | ----------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| source           | `"file" \| "string"` | Yes                     |                                             | Indicates how the header content is supplied.                                                                                                                                                               |
-| style            | `"line" \| "jsdoc"`  | No                      | `"jsdoc"`                                   | Indicates the comment style to enforce. A leading line-style comment block will only include adjacent line comments, although a line comment's content may be empty. No effect if `enableVueSupport: true`. |
-| content          | string               | When `source: "string"` |                                             | The string to enforce in the header comment.                                                                                                                                                                |
-| path             | string               | When `source: "file"`   |                                             | The path to a file containing the header content to enforce.                                                                                                                                                |
-| preservePragmas  | boolean              | No                      | `true`                                      | Preserves existing pragma expressions in leading comments when updating header. No effect when `style: "line"`.                                                                                             |
-| blockPrefix      | string               | No                      | [See below](#default-prefixes-and-suffixes) | Content at the start of the leading comment block.                                                                                                                                                          |
-| blockSuffix      | string               | No                      | [See below](#default-prefixes-and-suffixes) | Content at the end of the leading comment block.                                                                                                                                                            |
-| linePrefix       | string               | No                      | [See below](#default-prefixes-and-suffixes) | Content prepended to the start of each line of content.                                                                                                                                                     |
-| trailingNewlines | number               | No                      |                                             | Number of empty lines to enforce after the leading comment.                                                                                                                                                 |
-| variables        | object               | No                      |                                             | The keys to find and values to fill when formatting the provided header. Values must be strings.                                                                                                            |
-| enableVueSupport | boolean              | No                      | `false`                                     | **EXPERIMENTAL!**  Enable support for parsing `.vue` files. Must be used with `vue-eslint-parser`. [See above](#usage-with-vue) for details.                                                                |
+| Name             | Type                                                              | Required                | Default                                     | Description                                                                                                                                                                                                 |
+| ---------------- | ----------------------------------------------------------------- | ----------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source           | `"file" \| "string"`                                              | Yes                     |                                             | Indicates how the header content is supplied.                                                                                                                                                               |
+| style            | `"line" \| "jsdoc"`                                               | No                      | `"jsdoc"`                                   | Indicates the comment style to enforce. A leading line-style comment block will only include adjacent line comments, although a line comment's content may be empty. No effect if `enableVueSupport: true`. |
+| content          | string                                                            | When `source: "string"` |                                             | The string to enforce in the header comment.                                                                                                                                                                |
+| path             | string                                                            | When `source: "file"`   |                                             | The path to a file containing the header content to enforce.                                                                                                                                                |
+| preservePragmas  | boolean                                                           | No                      | `true`                                      | Preserves existing pragma expressions in leading comments when updating header. No effect when `style: "line"`.                                                                                             |
+| blockPrefix      | string                                                            | No                      | [See below](#default-prefixes-and-suffixes) | Content at the start of the leading comment block.                                                                                                                                                          |
+| blockSuffix      | string                                                            | No                      | [See below](#default-prefixes-and-suffixes) | Content at the end of the leading comment block.                                                                                                                                                            |
+| linePrefix       | string                                                            | No                      | [See below](#default-prefixes-and-suffixes) | Content prepended to the start of each line of content.                                                                                                                                                     |
+| trailingNewlines | number                                                            | No                      |                                             | Number of empty lines to enforce after the leading comment.                                                                                                                                                 |
+| variables        | object                                                            | No                      |                                             | The keys to find and values to fill when formatting the provided header. Values must be strings.                                                                                                            |
+| patterns         | `{ [key: string] : { pattern: string; defaultValue?: string; } }` | No                      |                                             | The keys to find and Regex patterns to validate when matching the provided header. **WARNING!** Default values must be provided for errors to be `--fix`able.                                               |
+| enableVueSupport | boolean                                                           | No                      | `false`                                     | **EXPERIMENTAL!** Enable support for parsing `.vue` files. Must be used with `vue-eslint-parser`. [See above](#usage-with-vue) for details.                                                                 |
 
 #### Default Prefixes and Suffixes
 
@@ -302,11 +360,11 @@ export default [
           source: "string",
           content: "This is a header.",
           // ...{Additional Configuration}
-        }
-      ]
+        },
+      ],
     },
-  }
-]
+  },
+];
 ```
 
 The subsequent section titles contain the additional configuration inserted
@@ -320,9 +378,9 @@ Expected/produced header:
 // This is a header.
 ```
 
-* Default block prefix: None
-* Default block suffix: None
-* Default line prefix: `" "`
+- Default block prefix: None
+- Default block suffix: None
+- Default line prefix: `" "`
 
 ##### style: "jsdoc"
 
@@ -334,9 +392,9 @@ Expected/produced header:
  */
 ```
 
-* Default block prefix: `"*\n"`
-* Default block suffix: `"\n "`
-* Default line prefix: `" * "`
+- Default block prefix: `"*\n"`
+- Default block suffix: `"\n "`
+- Default line prefix: `" * "`
 
 ##### enableVueSupport: true
 
@@ -348,13 +406,13 @@ Expected/produced header:
 -->
 ```
 
-* Default block prefix: `"\n"`
-* Default block suffix: `"\n"`
-* Default line prefix: `"  "`
+- Default block prefix: `"\n"`
+- Default block suffix: `"\n"`
+- Default line prefix: `"  "`
 
 ## Future
 
-* Add support for common pragma expressions that don't utilize the `@` symbol (e.g. eslint-disable)
+- Add support for common pragma expressions that don't utilize the `@` symbol (e.g. eslint-disable)
 
 ## Rules
 
@@ -362,8 +420,8 @@ Expected/produced header:
 
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).
 
-| Name                                         | Description                                                        | 🔧 |
-| :------------------------------------------- | :----------------------------------------------------------------- | :- |
-| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧 |
+| Name                                         | Description                                                        | 🔧  |
+| :------------------------------------------- | :----------------------------------------------------------------- | :-- |
+| [header-format](docs/rules/header-format.md) | Verifies the content and format of a file's leading comment block. | 🔧  |
 
 <!-- end auto-generated rules list -->
