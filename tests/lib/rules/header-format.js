@@ -400,7 +400,7 @@ ruleTester.run("header-presence", rule, {
           style: "jsdoc",
           patterns: {
             year: {
-              pattern: "\\d4",
+              pattern: "\\d{4}",
             },
           },
         },
@@ -417,7 +417,7 @@ ruleTester.run("header-presence", rule, {
           style: "jsdoc",
           patterns: {
             year: {
-              pattern: "\\d4",
+              pattern: "\\d{4}",
             },
           },
         },
@@ -434,7 +434,7 @@ ruleTester.run("header-presence", rule, {
           style: "jsdoc",
           patterns: {
             year: {
-              pattern: "\\d4",
+              pattern: "\\d{4}",
               defaultValue: "2025",
             },
           },
@@ -453,7 +453,7 @@ ruleTester.run("header-presence", rule, {
           style: "jsdoc",
           patterns: {
             year: {
-              pattern: "\\d4",
+              pattern: "\\d{4}",
               defaultValue: "2025",
             },
           },
@@ -462,6 +462,29 @@ ruleTester.run("header-presence", rule, {
       code: "/**\n * Copyright 202\n */\nmodule.exports = 42;\n",
       errors: [{ messageId: "headerContentMismatch" }],
       output: "/**\n * Copyright 2025\n */\nmodule.exports = 42;\n",
+    },
+    {
+      name: "Fixes a content mismatch with variables and partially satisfied pattern values",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year) {author}. All rights reserved (year).",
+          style: "jsdoc",
+          variables: {
+            author: "Author",
+          },
+          patterns: {
+            year: {
+              pattern: "\\d{4}",
+              defaultValue: "2025",
+            },
+          },
+        },
+      ],
+      code: "/**\n * Copyright 2025 Author. All rights reserved.\n */\nmodule.exports = 42;\n",
+      errors: [{ messageId: "headerContentMismatch" }],
+      output:
+        "/**\n * Copyright 2025 Author. All rights reserved 2025.\n */\nmodule.exports = 42;\n",
     },
   ],
 });

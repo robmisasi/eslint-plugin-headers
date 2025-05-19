@@ -289,7 +289,7 @@ Using the following configuration, patterns are used to validate content in exis
         },
         "patterns": {
           "year": {
-            "pattern": "\\d4",
+            "pattern": "\\d{4}",
             "defaultValue": "2025"
           }
         }
