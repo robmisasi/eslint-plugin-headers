@@ -3,42 +3,8 @@
 const assert = require("assert");
 
 const CommentBlockMatcher = require("../../lib/comment-block-matcher");
-const { getPatternLocations } = require("../../lib/utils");
 
 describe("CommentBlockMatcher", () => {
-  it("Correctly matches a starting pattern in a list of tokens", () => {
-    // Arrange
-    const prefix = "prefix";
-    const tokens = [{ value: `${prefix}Line1` }, { value: "Line2" }];
-    const matcher = new CommentBlockMatcher();
-
-    // Act
-    const result = matcher.tokensStartWith(tokens, prefix);
-
-    // Assert
-    assert(result.matches);
-    assert.equal(result.tokenIndex, 0);
-    assert.equal(result.tokenCharacterIndex, prefix.length);
-  });
-
-  it("Correctly matches an ending pattern in a list of tokens", () => {
-    // Arrange
-    const suffix = "suffix";
-    const tokens = [{ value: "Line1" }, { value: `Line2${suffix}` }];
-    const matcher = new CommentBlockMatcher();
-
-    // Act
-    const result = matcher.tokensEndWith(tokens, suffix);
-
-    // Assert
-    assert(result.matches);
-    assert.equal(result.tokenIndex, tokens.length - 1);
-    assert.equal(
-      result.tokenCharacterIndex,
-      tokens[tokens.length - 1].value.length - suffix.length,
-    );
-  });
-
   it("Correctly matches a JSDoc comment block", () => {
     // Arrange
     const config = {
@@ -64,7 +30,7 @@ describe("CommentBlockMatcher", () => {
     );
 
     // Assert
-    assert(!result.mismatches);
+    assert(!!result);
   });
 
   it("Correctly matches a line comment block", () => {
@@ -83,7 +49,7 @@ describe("CommentBlockMatcher", () => {
     const result = new CommentBlockMatcher(config).match(tokens);
 
     // Assert
-    assert(!result.mismatches);
+    assert(!!result);
   });
 
   it("Correctly fails a mismatched suffix", () => {
@@ -111,7 +77,7 @@ describe("CommentBlockMatcher", () => {
     );
 
     // Assert
-    assert(!!result.mismatches);
+    assert(!result);
   });
 
   it("Correctly fails a mismatched body", () => {
@@ -137,7 +103,7 @@ describe("CommentBlockMatcher", () => {
     );
 
     // Assert
-    assert(!!result.mismatches);
+    assert(!result);
   });
 
   it("Correctly fails a partial content match", () => {
@@ -154,7 +120,7 @@ describe("CommentBlockMatcher", () => {
     const result = new CommentBlockMatcher(config).match(tokens);
 
     // Assert
-    assert(result.mismatches);
+    assert(!result);
   });
 
   it("Correctly matches content with mixed line endings", () => {
@@ -175,7 +141,7 @@ describe("CommentBlockMatcher", () => {
     const result = new CommentBlockMatcher(config).match(tokens);
 
     // Assert
-    assert(!result.mismatches);
+    assert(result);
   });
 
   it("Correctly matches configured patterns", () => {
@@ -186,9 +152,14 @@ describe("CommentBlockMatcher", () => {
     const testPattern2 = "\\w+";
     const expectedPattern1Value = "2014";
     const expectedPattern2Value = "testWord";
-    const testExpectedContent = `Copyright (${testPattern1Name}). All rights reserved. (${testPattern2Name}). (bad)`;
+    const expectedContent = `Copyright (${testPattern1Name}). All rights reserved. (${testPattern2Name}). (bad)`;
     const commentString = `Copyright ${expectedPattern1Value}. All rights reserved. ${expectedPattern2Value}. (bad)`;
     const matcher = new CommentBlockMatcher({
+      blockPrefix: "",
+      blockSuffix: "",
+      linePrefix: "",
+      eol: "\n",
+      expectedLines: [expectedContent],
       patterns: {
         [testPattern1Name]: { pattern: testPattern1 },
         [testPattern2Name]: { pattern: testPattern2 },
@@ -196,10 +167,10 @@ describe("CommentBlockMatcher", () => {
     });
 
     // Act
-    const result = matcher.matchStrings(testExpectedContent, commentString);
+    const result = matcher.match([{ value: commentString }]);
 
     // Assert
-    assert(!result);
+    assert(result);
   });
 
   it("Correctly identifies mismatched patterns", () => {
@@ -216,17 +187,19 @@ describe("CommentBlockMatcher", () => {
       [testPattern1Name]: { pattern: testPattern1 },
       [testPattern2Name]: { pattern: testPattern2 },
     };
-    const patternLocations = getPatternLocations(expectedContent, patterns);
-    const matcher = new CommentBlockMatcher({ patterns });
+    const matcher = new CommentBlockMatcher({
+      blockPrefix: "",
+      blockSuffix: "",
+      linePrefix: "",
+      eol: "\n",
+      expectedLines: [expectedContent],
+      patterns,
+    });
 
     // Act
-    const result = matcher.verifyPatternValues(
-      expectedContent,
-      commentString,
-      patternLocations,
-    );
+    const result = matcher.match([{ value: commentString }]);
 
     // Assert
-    assert(result !== undefined);
+    assert(!result);
   });
 });
