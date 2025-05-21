@@ -3,6 +3,7 @@
 const assert = require("assert");
 
 const CommentFormatter = require("../../lib/comment-formatter");
+const { getPatternIdentifier } = require("../../lib/utils");
 
 describe("CommentFormatter", () => {
   it("Formats a default block comment correctly", () => {
@@ -114,5 +115,65 @@ describe("CommentFormatter", () => {
     assert.equal(actualBlockString, expectedBlockString);
     assert.equal(actualLineString, expectedLineString);
     assert.equal(actualHtmlString, expectedHtmlString);
+  });
+
+  it("Formats pattern values correctly", () => {
+    // Arrange
+    const patternName = "testPattern";
+    const patternValuesList = ["patternValue1", "patternValue2"];
+    const patternValuesMap = { [patternName]: patternValuesList };
+    const lines = [
+      `First value:(${patternName})`,
+      `Next value:(${patternName})`,
+    ];
+    const expectedLines = `/**\n * ${lines[0].replace(
+      getPatternIdentifier(patternName),
+      patternValuesList[0],
+    )}\n * ${lines[1].replace(
+      getPatternIdentifier(patternName),
+      patternValuesList[1],
+    )}\n */`;
+    const formatter = new CommentFormatter(lines, {
+      eol: "\n",
+      defaultPatternValues: {
+        [patternName]: "testDefaultPatternValue",
+      },
+    });
+
+    // Act
+    const result = formatter.format("jsdoc", patternValuesMap);
+
+    // Assert
+    assert.equal(result, expectedLines);
+  });
+
+  it("Formats default pattern values correctly", () => {
+    // Arrange
+    const patternName = "testPattern";
+    const defaultPatternValue = "testDefaultPatternValue";
+    const patternValuesList = ["patternValue1"];
+    const defaultPatternValuesMap = { [patternName]: defaultPatternValue };
+    const patternValuesMap = { [patternName]: patternValuesList };
+    const lines = [
+      `First value:(${patternName})`,
+      `Next value:(${patternName})`,
+    ];
+    const expectedLines = `/**\n * ${lines[0].replace(
+      getPatternIdentifier(patternName),
+      patternValuesList[0],
+    )}\n * ${lines[1].replace(
+      getPatternIdentifier(patternName),
+      defaultPatternValue,
+    )}\n */`;
+    const formatter = new CommentFormatter(lines, {
+      eol: "\n",
+      defaultPatternValues: defaultPatternValuesMap,
+    });
+
+    // Act
+    const result = formatter.format("jsdoc", patternValuesMap);
+
+    // Assert
+    assert.equal(result, expectedLines);
   });
 });

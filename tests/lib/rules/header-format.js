@@ -178,6 +178,28 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/*This is a header.*/module.exports = 42;\n",
     },
+    {
+      name: "Matches a pattern",
+      options: [
+        {
+          source: "string",
+          content: "This is the (word). This is the (number).",
+          style: "jsdoc",
+          blockPrefix: "",
+          blockSuffix: "",
+          linePrefix: "",
+          patterns: {
+            word: {
+              pattern: "\\w+",
+            },
+            number: {
+              pattern: "\\d+",
+            },
+          },
+        },
+      ],
+      code: "/*This is the expectedWord. This is the 2025.*/module.exports = 42;\n",
+    },
   ],
 
   invalid: [
@@ -368,6 +390,101 @@ ruleTester.run("header-presence", rule, {
       code: "module.exports = 42;\n",
       errors: [{ messageId: "missingHeader" }],
       output: "/*This is a header.*/module.exports = 42;\n",
+    },
+    {
+      name: "Identifies a missing header when configured with a pattern and no default pattern value",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year)",
+          style: "jsdoc",
+          patterns: {
+            year: {
+              pattern: "\\d{4}",
+            },
+          },
+        },
+      ],
+      code: "module.exports = 42;\n",
+      errors: [{ messageId: "missingHeader" }],
+    },
+    {
+      name: "Identifies an invalid pattern correctly",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year)",
+          style: "jsdoc",
+          patterns: {
+            year: {
+              pattern: "\\d{4}",
+            },
+          },
+        },
+      ],
+      code: "/**\nCopyright 202\n */\nmodule.exports = 42;\n",
+      errors: [{ messageId: "headerContentMismatch" }],
+    },
+    {
+      name: "Fixes a missing header when configured with a pattern and default value correctly",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year)",
+          style: "jsdoc",
+          patterns: {
+            year: {
+              pattern: "\\d{4}",
+              defaultValue: "2025",
+            },
+          },
+        },
+      ],
+      code: "module.exports = 42;\n",
+      errors: [{ messageId: "missingHeader" }],
+      output: "/**\n * Copyright 2025\n */\nmodule.exports = 42;\n",
+    },
+    {
+      name: "Fixes a pattern mismatch correctly",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year)",
+          style: "jsdoc",
+          patterns: {
+            year: {
+              pattern: "\\d{4}",
+              defaultValue: "2025",
+            },
+          },
+        },
+      ],
+      code: "/**\n * Copyright 202\n */\nmodule.exports = 42;\n",
+      errors: [{ messageId: "headerContentMismatch" }],
+      output: "/**\n * Copyright 2025\n */\nmodule.exports = 42;\n",
+    },
+    {
+      name: "Fixes a content mismatch with variables and partially satisfied pattern values",
+      options: [
+        {
+          source: "string",
+          content: "Copyright (year) {author}. All rights reserved (year).",
+          style: "jsdoc",
+          variables: {
+            author: "Author",
+          },
+          patterns: {
+            year: {
+              pattern: "\\d{4}",
+              defaultValue: "2025",
+            },
+          },
+        },
+      ],
+      code: "/**\n * Copyright 2025 Author. All rights reserved.\n */\nmodule.exports = 42;\n",
+      errors: [{ messageId: "headerContentMismatch" }],
+      output:
+        "/**\n * Copyright 2025 Author. All rights reserved 2025.\n */\nmodule.exports = 42;\n",
     },
   ],
 });
