@@ -426,7 +426,7 @@ ruleTester.run("header-presence", rule, {
       errors: [{ messageId: "headerContentMismatch" }],
     },
     {
-      name: "Fixes a missing header correctly when configured with a pattern and default value",
+      name: "Fixes a missing header when configured with a pattern and default value correctly",
       options: [
         {
           source: "string",

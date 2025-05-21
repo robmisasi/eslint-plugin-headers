@@ -274,6 +274,7 @@ module.exports = 42;
 ```
 
 **Example 3:**
+
 Using the following configuration, patterns are used to validate content in existing headers:
 
 ```json
