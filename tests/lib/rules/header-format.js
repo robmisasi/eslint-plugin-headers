@@ -200,6 +200,20 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/*This is the expectedWord. This is the 2025.*/module.exports = 42;\n",
     },
+    {
+      name: "Matches special characters when patterns are not configured",
+      options: [
+        {
+          source: "string",
+          style: "jsdoc",
+          blockPrefix: "",
+          blockSuffix: "",
+          linePrefix: "",
+          content: "Copyright (notPattern).",
+        },
+      ],
+      code: "/*Copyright (notPattern).*/module.exports = 42;\n",
+    },
   ],
 
   invalid: [
