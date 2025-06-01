@@ -214,6 +214,28 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/*Copyright (notPattern).*/module.exports = 42;\n",
     },
+    {
+      name: "Matches patterns and variables in prefixes and suffixes",
+      options: [
+        {
+          source: "string",
+          style: "jsdoc",
+          blockPrefix: "(blockPrefixPattern)",
+          blockSuffix: "(blockSuffixPattern) {star}",
+          linePrefix: "(linePrefixPattern)",
+          content: "Copyright.",
+          variables: {
+            star: "*",
+          },
+          patterns: {
+            blockPrefixPattern: { pattern: "\n?", defaultValue: "\n" },
+            blockSuffixPattern: { pattern: "abcde", defaultValue: "abcde" },
+            linePrefixPattern: { pattern: "\\* ", defaultValue: "* " },
+          },
+        },
+      ],
+      code: "/** Copyright.abcde **/module.exports = 42;",
+    },
   ],
 
   invalid: [

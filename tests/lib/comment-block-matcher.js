@@ -202,4 +202,23 @@ describe("CommentBlockMatcher", () => {
     // Assert
     assert(!result);
   });
+
+  it("Escapes input strings correctly", () => {
+    // Arrange
+    const expectedContent = `.`;
+    const testInvalidActualContent = `f`;
+    const matcher = new CommentBlockMatcher({
+      blockPrefix: "",
+      blockSuffix: "",
+      linePrefix: "",
+      eol: "\n",
+      expectedLines: [expectedContent],
+    });
+
+    // Act
+    const result = matcher.match([{ value: testInvalidActualContent }]);
+
+    // Assert
+    assert(!result);
+  });
 });
