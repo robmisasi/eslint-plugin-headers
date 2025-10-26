@@ -236,6 +236,17 @@ ruleTester.run("header-presence", rule, {
       ],
       code: "/** Copyright.abcde **/module.exports = 42;",
     },
+    {
+      name: "Matches a leading tag",
+      options: [
+        {
+          source: "string",
+          style: "jsdoc",
+          content: "Copyright",
+        },
+      ],
+      code: "/**\n * @author testAuthor\n * Copyright\n */\nmodule.exports = 42;\n",
+    },
   ],
 
   invalid: [
