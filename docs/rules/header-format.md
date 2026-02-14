@@ -1,4 +1,6 @@
-# Verifies the content and format of a file's leading comment block (`headers/header-format`)
+# headers/header-format
+
+📝 Verifies the content and format of a file's leading comment block.
 
 🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
