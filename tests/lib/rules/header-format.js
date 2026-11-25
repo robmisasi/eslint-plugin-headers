@@ -11,8 +11,9 @@ const os = require("os");
 // Requirements
 //------------------------------------------------------------------------------
 
+const assert = require("assert");
 const rule = require("../../../lib/rules/header-format"),
-  RuleTester = require("eslint").RuleTester;
+  { Linter, RuleTester } = require("eslint");
 
 //------------------------------------------------------------------------------
 // Tests
@@ -631,4 +632,31 @@ ruleTesterVue.run("header-presence-html", rule, {
         "<!--\n  This is a header\n-->\n<template>\n  <div>This is content</div>\n</template>\n<!-- This is a footer -->",
     },
   ],
+});
+
+describe("header-format options", () => {
+  const configFor = (ruleConfig) => ({
+    plugins: { headers: { rules: { "header-format": rule } } },
+    rules: { "headers/header-format": ruleConfig },
+  });
+
+  it("Throws a descriptive error when no options are provided", () => {
+    const linter = new Linter();
+    assert.throws(
+      () => linter.verify("const a = 1;", configFor("error")),
+      /The "source" option is required/,
+    );
+  });
+
+  it("Throws a descriptive error when 'source' is omitted", () => {
+    const linter = new Linter();
+    assert.throws(
+      () =>
+        linter.verify(
+          "const a = 1;",
+          configFor(["error", { content: "This is a header" }]),
+        ),
+      /The "source" option is required/,
+    );
+  });
 });
