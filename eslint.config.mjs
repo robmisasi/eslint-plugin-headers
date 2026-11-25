@@ -3,6 +3,8 @@ import eslintPlugin from "eslint-plugin-eslint-plugin";
 import nodePlugin from "eslint-plugin-n";
 import globals from "globals";
 
+import headersPlugin from "./lib/index.js";
+
 const configConfig = {
   name: "eslint-config",
   files: ["eslint.config.mjs"],
@@ -25,6 +27,29 @@ const srcConfig = {
   },
 };
 
+const headerConfig = {
+  name: "headers",
+  files: ["lib/**/*.js"],
+  plugins: {
+    headers: headersPlugin,
+  },
+  rules: {
+    "headers/header-format": [
+      "error",
+      {
+        source: "string",
+        style: "jsdoc",
+        content: "@fileoverview (description)\n@author (author)",
+        patterns: {
+          description: { pattern: ".+" },
+          author: { pattern: ".+" },
+        },
+        trailingNewlines: 1,
+      },
+    ],
+  },
+};
+
 const testConfig = {
   name: "test",
   files: ["tests/**/*.js"],
@@ -42,5 +67,6 @@ export default [
   nodePlugin.configs["flat/recommended"],
   configConfig,
   srcConfig,
+  headerConfig,
   testConfig,
 ];
